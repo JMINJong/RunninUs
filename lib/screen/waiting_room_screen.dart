@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:runnin_us/const/dummy.dart';
-import 'package:runnin_us/screen/run/google_map.dart';
+import 'package:runnin_us/screen/map/google_map.dart';
 
 class WaitingRoomScreen extends StatefulWidget {
   const WaitingRoomScreen({Key? key}) : super(key: key);

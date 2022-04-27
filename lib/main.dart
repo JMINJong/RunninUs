@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:runnin_us/screen/run/google_map.dart';
+import 'package:runnin_us/screen/map/google_map.dart';
 import 'package:runnin_us/screen/home_screen.dart';
 import 'package:runnin_us/screen/init_screen.dart';
 import 'package:runnin_us/screen/auth/login.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:runnin_us/screen/run/google_map.dart';
+import 'package:runnin_us/screen/map/google_map.dart';
 import 'package:runnin_us/screen/reserved_room_screen.dart';
 import 'package:runnin_us/screen/store_screen.dart';
 import 'package:runnin_us/screen/waiting_room_screen.dart';
