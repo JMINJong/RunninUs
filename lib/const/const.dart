@@ -1,23 +1,28 @@
-
 List waitingRoom=[
-  {'host':'jeon1 min jong',
-  'latitude':'37.435288',
-  'longitude':'127.138544',
-  'level':'4',
-  'startTime':'17:30',
-  'endTime':'18:30'},
-  {'host':'jeon2 min jong',
+  {
+    'host':'jeon min jong',
     'latitude':'37.435288',
     'longitude':'127.138544',
     'level':'4',
     'startTime':'17:30',
-    'endTime':'18:30'},
-  {'host':'jeon3 min jong',
+    'endTime':'18:30'
+  },
+  {
+    'host':'lee jun hee',
     'latitude':'37.435288',
     'longitude':'127.138544',
     'level':'4',
     'startTime':'17:30',
-    'endTime':'18:30'},
+    'endTime':'18:30'
+  },
+  {
+    'host':'lee gil ya',
+    'latitude':'37.435288',
+    'longitude':'127.138544',
+    'level':'4',
+    'startTime':'17:30',
+    'endTime':'18:30'
+  },
 ];
 
 List levelList=[

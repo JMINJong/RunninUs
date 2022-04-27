@@ -76,8 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
       currentIndex: currentindex,
       onTap: (int index) {
         setState(
-          () {
-           
+              () {
+
             currentindex = index;
             pageController.animateToPage(index,
                 duration: Duration(milliseconds: 500), curve: Curves.ease);
