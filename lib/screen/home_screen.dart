@@ -17,17 +17,18 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int currentindex = 0;
   PageController pageController = PageController(
-    initialPage: 1,
+    initialPage: 0,
     keepPage: true,
   );
 
-@override
+  @override
   void initState() {
-  Geolocator.isLocationServiceEnabled();
-  Geolocator.checkPermission();
-  Geolocator.requestPermission();
+    Geolocator.isLocationServiceEnabled();
+    Geolocator.checkPermission();
+    Geolocator.requestPermission();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -35,29 +36,37 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           title: Text('RunninUs'),
           centerTitle: true,
+          automaticallyImplyLeading: false,
         ),
         bottomNavigationBar: _bottomNavi(),
-        body: PageView(
-          controller: pageController,
-          onPageChanged: (int index){
-            setState(() {
-              currentindex=index;
-              if(index==0){
-                print('데이터 받아오기');
-              }
-            });
+        body: WillPopScope(
+          onWillPop: (){
+            return Future(()=>false);
           },
-          children: [
-            WaitingRoomScreen(),
-            ReservedRoomScreen(),
-            MyPageScreen(),
-            MyExercise(),
-          ],
+          child: PageView(
+
+            controller: pageController,
+            onPageChanged: (int index) {
+              setState(() {
+                currentindex = index;
+                if (index == 0) {
+                  print('데이터 받아오기');
+                }
+              });
+            },
+            children: [
+              WaitingRoomScreen(),
+              ReservedRoomScreen(),
+              MyPageScreen(),
+              StoreScreen(),
+            ],
+          ),
         ),
       ),
     );
   }
-  Widget _bottomNavi(){
+
+  Widget _bottomNavi() {
     return BottomNavigationBar(
       backgroundColor: Colors.black,
       selectedItemColor: Colors.indigo,
@@ -65,17 +74,19 @@ class _HomeScreenState extends State<HomeScreen> {
       currentIndex: currentindex,
       onTap: (int index) {
         setState(
-              () {
+          () {
             currentindex = index;
-            pageController.animateToPage(index, duration: Duration(milliseconds: 500) , curve: Curves.ease);
+            pageController.animateToPage(index,
+                duration: Duration(milliseconds: 500), curve: Curves.ease);
           },
         );
       },
       items: [
         BottomNavigationBarItem(label: '대기실', icon: Icon(Icons.home)),
-        BottomNavigationBarItem(label: '예약실', icon: Icon(Icons.watch_later_outlined)),
+        BottomNavigationBarItem(
+            label: '예약실', icon: Icon(Icons.watch_later_outlined)),
         BottomNavigationBarItem(label: '내 정보', icon: Icon(Icons.man)),
-        BottomNavigationBarItem(label: '스토어', icon: Icon(Icons.money)),
+        BottomNavigationBarItem(label: '스토어', icon: Icon(Icons.attach_money)),
       ],
     );
   }
