@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:runnin_us/screen/google_map.dart';
+import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/screen/reserved_room_screen.dart';
 import 'package:runnin_us/screen/store_screen.dart';
 import 'package:runnin_us/screen/waiting_room_screen.dart';
@@ -16,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentindex = 0;
+  Color mainColor=MINT_COLOR;
   PageController pageController = PageController(
     initialPage: 0,
     keepPage: true,
@@ -37,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
           title: Text('RunninUs'),
           centerTitle: true,
           automaticallyImplyLeading: false,
+          backgroundColor: mainColor,
         ),
         bottomNavigationBar: _bottomNavi(),
         body: WillPopScope(
@@ -44,11 +46,11 @@ class _HomeScreenState extends State<HomeScreen> {
             return Future(()=>false);
           },
           child: PageView(
-
             controller: pageController,
             onPageChanged: (int index) {
               setState(() {
                 currentindex = index;
+
                 if (index == 0) {
                   print('데이터 받아오기');
                 }
@@ -69,12 +71,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _bottomNavi() {
     return BottomNavigationBar(
       backgroundColor: Colors.black,
-      selectedItemColor: Colors.indigo,
+      selectedItemColor: mainColor,
       unselectedItemColor: Colors.black,
       currentIndex: currentindex,
       onTap: (int index) {
         setState(
           () {
+           
             currentindex = index;
             pageController.animateToPage(index,
                 duration: Duration(milliseconds: 500), curve: Curves.ease);

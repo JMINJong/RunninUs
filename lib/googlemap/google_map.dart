@@ -11,28 +11,31 @@ class MyExercise extends StatefulWidget {
 
 class _MyExerciseState extends State<MyExercise> {
   static LatLng defaultLatlng = LatLng(37.435308, 127.138625);
-  static final CameraPosition initialPosition =
+  static CameraPosition initialPosition =
       CameraPosition(target: defaultLatlng, zoom: 15);
   static Circle defaultCircle = Circle(
-    circleId: CircleId('circle1'),
+    circleId: CircleId('circle'),
     radius: 100,
     center: defaultLatlng,
     fillColor: Colors.grey.withOpacity(0.3),
     strokeWidth: 1,
   );
   static Marker defaultMarker =
-      Marker(markerId: MarkerId('marker1'), position: defaultLatlng);
+      Marker(markerId: MarkerId('marker'), position: defaultLatlng);
   late GoogleMapController _controller;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('대기실 생성'),
-      centerTitle: true,),
+      appBar: AppBar(
+        title: Text('대기실 생성'),
+        centerTitle: true,
+      ),
       body: renderGmap(),
     );
   }
-  Widget renderGmap(){
+
+  Widget renderGmap() {
     return Column(
       children: [
         Expanded(
@@ -47,7 +50,7 @@ class _MyExerciseState extends State<MyExercise> {
               }
               Position position = snapshot.data;
               defaultLatlng = LatLng(position.latitude, position.longitude);
-
+              initialPosition = CameraPosition(target: defaultLatlng, zoom: 15);
               return GoogleMap(
                 onMapCreated: (controller) {
                   setState(() {
@@ -59,7 +62,7 @@ class _MyExerciseState extends State<MyExercise> {
                 markers: {defaultMarker},
                 onTap: (LatLng index) {
                   setState(() {
-                    defaultLatlng=index;
+                    defaultLatlng = index;
                     _controller.animateCamera(CameraUpdate.newLatLng(index));
                     defaultMarker =
                         Marker(markerId: MarkerId('marker1'), position: index);
