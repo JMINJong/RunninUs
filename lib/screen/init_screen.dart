@@ -14,7 +14,7 @@ class _InitScreenState extends State<InitScreen> {
   @override
   void initState() {
     Future.delayed(Duration(seconds: 3)).then((value) => Navigator.of(context)
-        .push(MaterialPageRoute(builder: (_) => LoginScreen())));
+        .pushReplacement(MaterialPageRoute(builder: (_) => LoginScreen())));
     super.initState();
   }
 

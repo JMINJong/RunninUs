@@ -19,7 +19,7 @@ class LoginScreen extends StatelessWidget {
                 iconSize: 400,
                 onPressed: () {
                   Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (_) => HomeScreen()));
+                      .pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
                 },
               ),
             ),

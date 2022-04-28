@@ -4,22 +4,34 @@ import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/screen/reserved_room_screen.dart';
 import 'package:runnin_us/screen/store_screen.dart';
 import 'package:runnin_us/screen/waiting_room_screen.dart';
+import '../const/dummy.dart';
 import 'my_page_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
+
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
+
+
 }
+
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentindex = 0;
-  Color mainColor=MINT_COLOR;
+  Color mainColor = MINT_COLOR;
   PageController pageController = PageController(
     initialPage: 0,
     keepPage: true,
   );
+  void _parentSetState(){
+    setState(() {
+
+    });
+  }
+
 
   @override
   void initState() {
@@ -40,27 +52,22 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: mainColor,
         ),
         bottomNavigationBar: _bottomNavi(),
-        body: WillPopScope(
-          onWillPop: (){
-            return Future(()=>false);
+        body: PageView(
+          controller: pageController,
+          onPageChanged: (int index) {
+            setState(() {
+              currentindex = index;
+              if (index == 0) {
+                print('데이터 받아오기');
+              }
+            });
           },
-          child: PageView(
-            controller: pageController,
-            onPageChanged: (int index) {
-              setState(() {
-                currentindex = index;
-                if (index == 0) {
-                  print('데이터 받아오기');
-                }
-              });
-            },
-            children: [
-              WaitingRoomScreen(),
-              ReservedRoomScreen(),
-              MyPageScreen(),
-              StoreScreen(),
-            ],
-          ),
+          children: [
+            !isEntered ? WaitingRoomScreen(parentSetState: _parentSetState,) : renderWaitingRoom(),
+            ReservedRoomScreen(),
+            MyPageScreen(),
+            StoreScreen(),
+          ],
         ),
       ),
     );
@@ -74,8 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
       currentIndex: currentindex,
       onTap: (int index) {
         setState(
-              () {
-
+          () {
             currentindex = index;
             pageController.animateToPage(index,
                 duration: Duration(milliseconds: 500), curve: Curves.ease);
@@ -89,6 +95,23 @@ class _HomeScreenState extends State<HomeScreen> {
         BottomNavigationBarItem(label: '내 정보', icon: Icon(Icons.man)),
         BottomNavigationBarItem(label: '스토어', icon: Icon(Icons.attach_money)),
       ],
+    );
+  }
+
+  Widget renderWaitingRoom() {
+    return Container(
+      child: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            setState(
+              () {
+                isEntered = false;
+              },
+            );
+          },
+          child: Text('나가기'),
+        ),
+      ),
     );
   }
 }

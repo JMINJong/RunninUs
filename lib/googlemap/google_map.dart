@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:runnin_us/const/color.dart';
 
 class MyExercise extends StatefulWidget {
   const MyExercise({Key? key}) : super(key: key);
@@ -30,6 +31,7 @@ class _MyExerciseState extends State<MyExercise> {
       appBar: AppBar(
         title: Text('대기실 생성'),
         centerTitle: true,
+        backgroundColor: MINT_COLOR,
       ),
       body: renderGmap(),
     );
@@ -90,6 +92,9 @@ class _MyExerciseState extends State<MyExercise> {
                 onPressed: () {
                   print(defaultLatlng);
                 },
+                style: ElevatedButton.styleFrom(
+                  primary: MINT_COLOR,
+                ),
                 child: Text('방 생성'),
               ),
             ],
