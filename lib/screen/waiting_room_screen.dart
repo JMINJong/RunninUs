@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:runnin_us/const/color.dart';
-import 'package:runnin_us/const/const.dart';
+import 'package:runnin_us/const/dummy.dart';
 import 'package:runnin_us/googlemap/google_map.dart';
+import 'package:runnin_us/googlemap/on_runnin.dart';
 
 TextStyle ts=TextStyle(
   color: Colors.white,
@@ -78,7 +79,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
     print(marker.markerId);
     return GestureDetector(
       onTap: (){
-        Navigator.of(context).push(MaterialPageRoute(builder: (_)=>MyExercise()));
+        Navigator.of(context).push(MaterialPageRoute(builder: (_)=>OnRunningScreen()));
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 8),
@@ -96,13 +97,13 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                 onTap: (value) {
                   showModalBottomSheet(
                       context: context, builder: (BuildContext context) {
-                        return Container(
-                          height: MediaQuery.of(context).size.height/2,
-                          child: GoogleMap(
-                            initialCameraPosition: cp,
-                            markers: {marker},
-                          ),
-                        );
+                    return Container(
+                      height: MediaQuery.of(context).size.height/2,
+                      child: GoogleMap(
+                        initialCameraPosition: cp,
+                        markers: {marker},
+                      ),
+                    );
                   });
                 },
                 zoomControlsEnabled: false,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:runnin_us/screen/home_screen.dart';
-import 'package:runnin_us/screen/login.dart';
+import 'package:runnin_us/screen/auth/login.dart';
 
 class InitScreen extends StatefulWidget {
   const InitScreen({Key? key}) : super(key: key);

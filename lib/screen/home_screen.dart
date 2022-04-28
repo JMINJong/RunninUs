@@ -4,7 +4,6 @@ import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/screen/reserved_room_screen.dart';
 import 'package:runnin_us/screen/store_screen.dart';
 import 'package:runnin_us/screen/waiting_room_screen.dart';
-
 import 'my_page_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -50,7 +49,6 @@ class _HomeScreenState extends State<HomeScreen> {
             onPageChanged: (int index) {
               setState(() {
                 currentindex = index;
-
                 if (index == 0) {
                   print('데이터 받아오기');
                 }
