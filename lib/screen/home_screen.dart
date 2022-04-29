@@ -12,9 +12,7 @@ class HomeScreen extends StatefulWidget {
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
-
 }
-
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentindex = 0;
@@ -23,12 +21,9 @@ class _HomeScreenState extends State<HomeScreen> {
     initialPage: 0,
     keepPage: true,
   );
-  void _parentSetState(){
-    setState(() {
-
-    });
+  void _parentSetState() {
+    setState(() {});
   }
-
 
   @override
   void initState() {
@@ -60,7 +55,11 @@ class _HomeScreenState extends State<HomeScreen> {
             });
           },
           children: [
-            !isEntered ? WaitingRoomScreen(parentSetState: _parentSetState,) : renderWaitingRoom(),
+            !isEntered
+                ? WaitingRoomScreen(
+                    parentSetState: _parentSetState,
+                  )
+                : renderWaitingRoom(),
             ReservedRoomScreen(),
             StoreScreen(),
             MyPageScreen(),
