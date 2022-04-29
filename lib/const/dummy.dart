@@ -138,6 +138,8 @@ List myPageList = [
   }
 ];
 
+int myPoint = 3000;
+
 
 
 bool isEntered=true;

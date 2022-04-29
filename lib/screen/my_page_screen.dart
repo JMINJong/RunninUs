@@ -18,7 +18,6 @@ class MyPageScreen extends StatelessWidget {
   }) {
     return Container(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
