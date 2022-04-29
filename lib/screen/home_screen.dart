@@ -62,8 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             !isEntered ? WaitingRoomScreen(parentSetState: _parentSetState,) : renderWaitingRoom(),
             ReservedRoomScreen(),
-            MyPageScreen(),
             StoreScreen(),
+            MyPageScreen(),
           ],
         ),
       ),
@@ -89,8 +89,8 @@ class _HomeScreenState extends State<HomeScreen> {
         BottomNavigationBarItem(label: '대기실', icon: Icon(Icons.home)),
         BottomNavigationBarItem(
             label: '예약실', icon: Icon(Icons.watch_later_outlined)),
-        BottomNavigationBarItem(label: '내 정보', icon: Icon(Icons.man)),
         BottomNavigationBarItem(label: '스토어', icon: Icon(Icons.attach_money)),
+        BottomNavigationBarItem(label: '내 정보', icon: Icon(Icons.man)),
       ],
     );
   }
