@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:runnin_us/const/color.dart';
+import 'package:runnin_us/screen/my_page_screen.dart';
 import 'package:runnin_us/screen/reserved_room_screen.dart';
 import 'package:runnin_us/screen/store_screen.dart';
 import 'package:runnin_us/screen/waiting_room_screen.dart';
 import '../const/dummy.dart';
-import 'my_page_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
-
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
-
 
 }
 
