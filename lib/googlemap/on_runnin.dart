@@ -21,7 +21,8 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
           Expanded(
             child: FutureBuilder(
               future: Geolocator.getCurrentPosition(),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              builder:
+                  (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 if (snapshot.hasData == false) {
                   return Center(
                     child: CircularProgressIndicator(),
@@ -33,8 +34,8 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
 
                 return StreamBuilder<Position>(
                   stream: Geolocator.getPositionStream(),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  builder: (BuildContext context,
+                      AsyncSnapshot<dynamic> snapshot) {
                     if (snapshot.hasData == false) {
                       return Center(
                         child: CircularProgressIndicator(),
@@ -51,8 +52,6 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                           points: movePath,
                           color: Colors.blue),
                     );
-
-
 
                     return GoogleMap(
                       onMapCreated: (controller) {

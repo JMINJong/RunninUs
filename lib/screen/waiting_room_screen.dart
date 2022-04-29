@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:latlong2/latlong.dart' as d;
+import 'package:provider/provider.dart';
 import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/const/dummy.dart';
 import 'package:runnin_us/googlemap/google_map.dart';
 import 'package:runnin_us/googlemap/on_runnin.dart';
-
-import 'home_screen.dart';
+import 'package:runnin_us/provider/enter_check.dart';
 
 const TextStyle ts = TextStyle(
   color: Colors.white,
@@ -16,18 +16,20 @@ const TextStyle ts = TextStyle(
 );
 
 class WaitingRoomScreen extends StatefulWidget {
-  final Function() parentSetState;
-  const WaitingRoomScreen({Key? key, required this.parentSetState})
-      : super(key: key);
+  const WaitingRoomScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<WaitingRoomScreen> createState() => _WaitingRoomScreenState();
 }
 
 class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
+  late EnterCheck _enterCheck;
   @override
   Widget build(BuildContext context) {
-    HomeScreen? parent = context.findAncestorWidgetOfExactType<HomeScreen>();
+    _enterCheck = Provider.of<EnterCheck>(context);
+
     return Column(
       children: [
         Expanded(
@@ -45,6 +47,19 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                       );
                     },
                     child: Text('대기실 생성'),
+                    style: ElevatedButton.styleFrom(
+                      primary: MINT_COLOR,
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => OnRunningScreen(),
+                        ),
+                      );
+                    },
+                    child: Text('운동 중 화면'),
                     style: ElevatedButton.styleFrom(
                       primary: MINT_COLOR,
                     ),
@@ -72,8 +87,14 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                     return Geolocator.getCurrentPosition();
                   },
                   child: ListView.separated(
-                      itemBuilder: (context, index) {
-                        return renderWaitingRoom(index, nowLatLng, parent);
+                      itemBuilder: (
+                        context,
+                        index,
+                      ) {
+                        return renderWaitingRoom(
+                          index,
+                          nowLatLng,
+                        );
                       },
                       separatorBuilder: (context, index) {
                         if (index % 8 == 0 && index != 0) {
@@ -97,7 +118,10 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
     );
   }
 
-  renderWaitingRoom(int index, LatLng data, parent) {
+  renderWaitingRoom(
+    int index,
+    LatLng data,
+  ) {
     final LatLng latlng = LatLng(double.parse(waitingRoom[index]['latitude']),
         double.parse(waitingRoom[index]['longitude']));
     final CameraPosition cp = CameraPosition(target: latlng, zoom: 17);
@@ -115,13 +139,8 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
       onTap: () {
         setState(
           () {
-            if (isEntered == true) {
-              return;
-            }
-            isEntered = true;
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => OnRunningScreen()))
-                .then((value) => widget.parentSetState);
+            print('입장');
+            _enterCheck.Enter();
           },
         );
       },

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 import 'package:runnin_us/const/color.dart';
+import 'package:runnin_us/provider/enter_check.dart';
+import 'package:runnin_us/screen/main_screen.dart';
 import 'package:runnin_us/screen/reserved_room_screen.dart';
 import 'package:runnin_us/screen/store_screen.dart';
 import 'package:runnin_us/screen/waiting_room_screen.dart';
@@ -10,14 +13,9 @@ import 'my_page_screen.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
-
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
-
-
 }
-
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentindex = 0;
@@ -26,12 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
     initialPage: 0,
     keepPage: true,
   );
-  void _parentSetState(){
-    setState(() {
-
-    });
-  }
-
 
   @override
   void initState() {
@@ -52,22 +44,25 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: mainColor,
         ),
         bottomNavigationBar: _bottomNavi(),
-        body: PageView(
-          controller: pageController,
-          onPageChanged: (int index) {
-            setState(() {
-              currentindex = index;
-              if (index == 0) {
-                print('데이터 받아오기');
-              }
-            });
-          },
-          children: [
-            !isEntered ? WaitingRoomScreen(parentSetState: _parentSetState,) : renderWaitingRoom(),
-            ReservedRoomScreen(),
-            MyPageScreen(),
-            StoreScreen(),
-          ],
+        body: ChangeNotifierProvider(
+          create: (_) => EnterCheck(),
+          child: PageView(
+            controller: pageController,
+            onPageChanged: (int index) {
+              setState(() {
+                currentindex = index;
+                if (index == 0) {
+                  print('데이터 받아오기');
+                }
+              });
+            },
+            children: [
+              MainScreen(),
+              ReservedRoomScreen(),
+              MyPageScreen(),
+              StoreScreen(),
+            ],
+          ),
         ),
       ),
     );
@@ -92,26 +87,9 @@ class _HomeScreenState extends State<HomeScreen> {
         BottomNavigationBarItem(label: '대기실', icon: Icon(Icons.home)),
         BottomNavigationBarItem(
             label: '예약실', icon: Icon(Icons.watch_later_outlined)),
-        BottomNavigationBarItem(label: '내 정보', icon: Icon(Icons.man)),
-        BottomNavigationBarItem(label: '스토어', icon: Icon(Icons.attach_money)),
+        BottomNavigationBarItem(label: '내 정보', icon: Icon(Icons.person)),
+        BottomNavigationBarItem(label: '스토어', icon: Icon(Icons.local_grocery_store)),
       ],
-    );
-  }
-
-  Widget renderWaitingRoom() {
-    return Container(
-      child: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            setState(
-              () {
-                isEntered = false;
-              },
-            );
-          },
-          child: Text('나가기'),
-        ),
-      ),
     );
   }
 }
