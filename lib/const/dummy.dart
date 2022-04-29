@@ -126,6 +126,23 @@ List waitingRoom=[
   },
 ];
 
+List myPageList = [
+  {
+    'name':'lee jun hee',
+    'age' : '25',
+    'location' : '성남',
+    'level' : '4',
+    'score' : '3.14',
+    'recent' : '3:15',
+    'point' : '90'
+  }
+];
+
+int myPoint = 3000;
+
+
+bool isEntered=true;
+
 List levelList=[
   1,2,3,4,5,6,7,8,9,10
 ];

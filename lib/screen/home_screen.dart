@@ -4,11 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/provider/enter_check.dart';
 import 'package:runnin_us/screen/main_screen.dart';
+import 'package:runnin_us/screen/my_page_screen.dart';
 import 'package:runnin_us/screen/reserved_room_screen.dart';
 import 'package:runnin_us/screen/store_screen.dart';
-import 'package:runnin_us/screen/waiting_room_screen.dart';
-import '../const/dummy.dart';
-import 'my_page_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -24,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
     initialPage: 0,
     keepPage: true,
   );
+
 
   @override
   void initState() {
@@ -88,7 +87,8 @@ class _HomeScreenState extends State<HomeScreen> {
         BottomNavigationBarItem(
             label: '예약실', icon: Icon(Icons.watch_later_outlined)),
         BottomNavigationBarItem(label: '내 정보', icon: Icon(Icons.person)),
-        BottomNavigationBarItem(label: '스토어', icon: Icon(Icons.local_grocery_store)),
+        BottomNavigationBarItem(
+            label: '스토어', icon: Icon(Icons.local_grocery_store)),
       ],
     );
   }
