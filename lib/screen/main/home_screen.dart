@@ -3,10 +3,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/provider/enter_check.dart';
-import 'package:runnin_us/screen/main_screen.dart';
-import 'package:runnin_us/screen/my_page_screen.dart';
-import 'package:runnin_us/screen/reserved_room_screen.dart';
-import 'package:runnin_us/screen/store_screen.dart';
+import 'package:runnin_us/screen/main/main_screen.dart';
+import 'package:runnin_us/screen/main/my_page_screen.dart';
+import 'package:runnin_us/screen/main/reserved_room_screen.dart';
+import 'package:runnin_us/screen/main/store_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -43,25 +43,22 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: mainColor,
         ),
         bottomNavigationBar: _bottomNavi(),
-        body: ChangeNotifierProvider(
-          create: (_) => EnterCheck(),
-          child: PageView(
-            controller: pageController,
-            onPageChanged: (int index) {
-              setState(() {
-                currentindex = index;
-                if (index == 0) {
-                  print('데이터 받아오기');
-                }
-              });
-            },
-            children: [
-              MainScreen(),
-              ReservedRoomScreen(),
-              MyPageScreen(),
-              StoreScreen(),
-            ],
-          ),
+        body: PageView(
+          controller: pageController,
+          onPageChanged: (int index) {
+            setState(() {
+              currentindex = index;
+              if (index == 0) {
+                print('데이터 받아오기');
+              }
+            });
+          },
+          children: [
+            MainScreen(),
+            ReservedRoomScreen(),
+            MyPageScreen(),
+            StoreScreen(),
+          ],
         ),
       ),
     );

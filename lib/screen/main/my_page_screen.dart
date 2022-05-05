@@ -3,7 +3,7 @@ import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/const/dummy.dart';
 
 class MyPageScreen extends StatelessWidget {
-  MyPageScreen({Key? key}) : super(key: key);
+  const MyPageScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

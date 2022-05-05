@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:runnin_us/screen/home_screen.dart';
+import 'package:runnin_us/screen/main/home_screen.dart';
 import 'package:runnin_us/screen/auth/login.dart';
 
 class InitScreen extends StatefulWidget {
