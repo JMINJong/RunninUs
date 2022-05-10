@@ -3,8 +3,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:runnin_us/const/color.dart';
-
-import '../provider/enter_check.dart';
+import 'package:runnin_us/const/dummy.dart';
+import '../../provider/enter_check.dart';
 
 //대기실 생성 화면
 
@@ -35,6 +35,10 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
   String dateButton = '날짜';
   String startButton = '시작 시간';
   String endButton = '종료 시간';
+  Color buttonColorDay=MINT_COLOR;
+  Color buttonColorStart=MINT_COLOR;
+  Color buttonColorEnd=MINT_COLOR;
+
   static CameraPosition initialPosition =
       CameraPosition(target: defaultLatLng, zoom: 15);
   static Circle defaultCircle = Circle(
@@ -65,7 +69,7 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
               width: MediaQuery.of(context).size.width / 3 - 20,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: MINT_COLOR,
+                  primary: buttonColorDay,
                 ),
                 onPressed: () {
                   Future<DateTime?> sD = showDatePicker(
@@ -84,6 +88,7 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
                         if (value == null) {
                           dateButton = '날짜';
                         } else {
+                          buttonColorDay=PINK_COLOR;
                           dateButton = value.toString().split(' ')[0];
                           selectedDate = value.toString();
                           today = value.day;
@@ -99,7 +104,7 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
               width: MediaQuery.of(context).size.width / 3 - 20,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: MINT_COLOR,
+                  primary: buttonColorStart,
                 ),
                 onPressed: () {
                   Future<TimeOfDay?> sT = showTimePicker(
@@ -145,8 +150,9 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
 
                       setState(
                         () {
-                          startButton = '${value.hour}:${value.minute}';
-                          selectedStartTime = '${value.hour}:${value.minute}';
+                          buttonColorStart=PINK_COLOR;
+                          startButton = '${value.hour.toString().padLeft(2,'0')}:${value.minute.toString().padLeft(2,'0')}';
+                          selectedStartTime = '${value.hour.toString().padLeft(2,'0')}:${value.minute.toString().padLeft(2,'0')}';
 
                           endButton = '종료시간';
                           selectedEndTime = '';
@@ -164,7 +170,7 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
               width: MediaQuery.of(context).size.width / 3 - 20,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: MINT_COLOR,
+                  primary: buttonColorEnd,
                 ),
                 onPressed: () {
                   Future<TimeOfDay?> eT = showTimePicker(
@@ -200,8 +206,9 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
 
                       setState(
                         () {
-                          endButton = '${value.hour}:${value.minute}';
-                          selectedEndTime = '${value.hour}:${value.minute}';
+                          buttonColorEnd=PINK_COLOR;
+                          endButton = '${value.hour.toString().padLeft(2,'0')}:${value.minute.toString().padLeft(2,'0')}';
+                          selectedEndTime = '${value.hour.toString().padLeft(2,'0')}:${value.minute.toString().padLeft(2,'0')}';
                         },
                       );
                     },
@@ -311,7 +318,9 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
                       }
                       return ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: isChecked ? PINK_COLOR : MINT_COLOR),
+                            primary: isChecked ? PINK_COLOR : MINT_COLOR,
+                            shape: CircleBorder(),
+                            minimumSize: Size(60, 60)),
                         onPressed: () {
                           setState(() {
                             selectedMaxNumberIndex = e;
@@ -331,23 +340,36 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
                       onPressed: () {
                         _enterCheck.CancelCreateRoom();
                       },
-                      style: ElevatedButton.styleFrom(primary: PINK_COLOR),
-                      child: Text('생성 취소'),
+                      style: ElevatedButton.styleFrom(
+                          primary: PINK_COLOR, minimumSize: Size(75, 37)),
+                      child: Text('취소'),
                     ),
                     ElevatedButton(
                       onPressed: () {
+
                         if (selectedEndTime == '' ||
                             selectedStartTime == '' ||
                             selectedDate == '') {
-                          showToast('날짜와 시작 시간, 종료 시간을 선택해 주세요.');
+                          showToast('사유 : 생성 날짜를 선택해 주세요.');
+                        } else if (selectedLevel == '' ||
+                            maxMemberCount == '') {
+                          showToast('사유 : 생성 옵션을 선택해 주세요.');
                         } else {
-                          print(selectedLatLng.latitude);
-                          print(selectedLatLng.longitude);
-                          print(selectedDate.split(' ')[0]);
-                          print(selectedStartTime);
-                          print(selectedEndTime);
-                          print(selectedLevel);
-                          print(maxMemberCount);
+
+                          // print(selectedLatLng.latitude);
+                          // print(selectedLatLng.longitude);
+                          // print(selectedDate.split(' ')[0]);
+                          // print(selectedStartTime);
+                          // print(selectedEndTime);
+                          // print(selectedLevel);
+                          // print(maxMemberCount);
+                          myEnteredRoom['host']=myPageList[0]['name'];
+                          myEnteredRoom['latitude']=selectedLatLng.latitude.toString();
+                          myEnteredRoom['longitude']=selectedLatLng.longitude.toString();
+                          myEnteredRoom['startTime']=selectedStartTime;
+                          myEnteredRoom['endTime']=selectedEndTime;
+                          myEnteredRoom['level']=selectedLevel;
+                          myEnteredRoom['maxMember']=maxMemberCount;
                           _enterCheck.CreateRoom();
                         }
                       },
@@ -372,7 +394,7 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: Text('설정 실패'),
+          title: Text('생성 실패'),
           content: Text(
             index,
             textAlign: TextAlign.center,

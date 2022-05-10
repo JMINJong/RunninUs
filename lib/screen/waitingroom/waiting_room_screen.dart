@@ -5,7 +5,6 @@ import 'package:latlong2/latlong.dart' as d;
 import 'package:provider/provider.dart';
 import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/const/dummy.dart';
-import 'package:runnin_us/googlemap/create_waiting_room.dart';
 import 'package:runnin_us/provider/enter_check.dart';
 
 const TextStyle ts = TextStyle(
@@ -114,9 +113,12 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
         d.LengthUnit.Kilometer,
         d.LatLng(latlng.latitude, latlng.longitude),
         d.LatLng(data.latitude, data.longitude));
-    print(latlng);
-    print(distance);
-    print(marker.markerId);
+    bool levelTooHigh=false;
+
+    if(int.parse(waitingRoom[index]['level']) >
+        int.parse(myPageList[0]['level'])){
+      levelTooHigh=true;
+    }
 
     return GestureDetector(
       onTap: () {
@@ -125,10 +127,8 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
         //인덱스 값 받아옴
         //받아온 인덱스로 대기실 구성
         //출력
-        print(enteredWaitingRoom);
-        print(enteredWaitingRoom['member'].length);
-        print(enteredWaitingRoom['member'].values.toList());
-        if (enteredWaitingRoom['member'].length > 3) {
+        if (waitingRoom[index]['member'].length >=
+            int.parse(waitingRoom[index]['maxMember']) - 1) {
           showDialog(
             context: context,
             builder: (_) {
@@ -149,7 +149,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
               );
             },
           );
-        } else if (int.parse(enteredWaitingRoom['level']) >
+        } else if (int.parse(waitingRoom[index]['level']) >
             int.parse(myPageList[0]['level'])) {
           showDialog(
             context: context,
@@ -159,7 +159,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 title: Text('입장 실패'),
-                content: Text('사유 : 입장 레벨이 너무 높습니다.'),
+                content: Text('사유 : 운동 레벨이 너무 높습니다.'),
                 actions: [
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(primary: PINK_COLOR),
@@ -192,6 +192,22 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(primary: MINT_COLOR),
                       onPressed: () {
+                        //waitingRoom[index]['member'].add(myPageList[0]['name']);
+                        myEnteredRoom['host'] = waitingRoom[index]['host'];
+                        myEnteredRoom['latitude'] =
+                            waitingRoom[index]['latitude'];
+                        myEnteredRoom['longitude'] =
+                            waitingRoom[index]['longitude'];
+                        myEnteredRoom['startTime'] =
+                            waitingRoom[index]['startTime'];
+                        myEnteredRoom['endTime'] =
+                            waitingRoom[index]['endTime'];
+                        myEnteredRoom['level'] = waitingRoom[index]['level'];
+                        myEnteredRoom['member'] = [
+                          ...waitingRoom[index]['member']
+                        ];
+                        myEnteredRoom['maxMember']=waitingRoom[index]['maxMember'];
+
                         _enterCheck.Enter();
                         Navigator.of(context).pop();
                       },
@@ -203,68 +219,84 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
         }
       },
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 8),
-        decoration: BoxDecoration(
-          color: MINT_COLOR.withOpacity(0.7),
-        ),
-        height: MediaQuery.of(context).size.width / 4,
-        child: Row(
-          children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 4,
-              child: GoogleMap(
-                onTap: (value) {
-                  showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return SizedBox(
-                          height: MediaQuery.of(context).size.height / 2,
-                          child: GoogleMap(
-                            initialCameraPosition: cp,
-                            markers: {marker},
-                          ),
-                        );
-                      });
-                },
-                zoomControlsEnabled: false,
-                initialCameraPosition: cp,
-              ),
+          margin: EdgeInsets.symmetric(horizontal: 8),
+          decoration: BoxDecoration(
+            color: MINT_COLOR.withOpacity(0.7),
+          ),
+          height: MediaQuery.of(context).size.width / 4,
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width - 16,
+            height: MediaQuery.of(context).size.height / 4,
+            child: Row(
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 4,
+                  child: GoogleMap(
+                    onTap: (value) {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return SizedBox(
+                              height: MediaQuery.of(context).size.height / 2,
+                              child: GoogleMap(
+                                initialCameraPosition: cp,
+                                markers: {marker},
+                              ),
+                            );
+                          });
+                    },
+                    zoomControlsEnabled: false,
+                    initialCameraPosition: cp,
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 6 / 12,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Center(
+                        child: levelTooHigh?Text(
+                          '운동레벨 : ${waitingRoom[index]['level']}',
+                          style:  ts.copyWith(color: Colors.red),
+                        ):Text(
+                          '운동레벨 : ${waitingRoom[index]['level']}',
+                          style:  ts,
+                        ),
+                      ),
+                      Center(
+                        child: Text(
+                          '시작시간 : ${waitingRoom[index]['startTime']}',
+                          style: ts.copyWith(fontSize: 20),
+                        ),
+                      ),
+                      Center(
+                        child: Text(
+                          '종료시간 : ${waitingRoom[index]['endTime']}',
+                          style: ts.copyWith(fontSize: 20),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 3 / 12 - 16,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        '${waitingRoom[index]['member'].length + 1} / ${waitingRoom[index]['maxMember']}',
+                        style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),
+                      ),
+                      Text(
+                        '$distance km',
+                        style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 3 / 4 - 16,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Center(
-                    child: Text(
-                      '방장 : ${waitingRoom[index]['host']},',
-                      style: ts,
-                    ),
-                  ),
-                  Center(
-                    child: Text(
-                      '시작시간 : ${waitingRoom[index]['startTime']} ~ 종료시간 : ${waitingRoom[index]['endTime']}',
-                      style: ts.copyWith(fontSize: 16),
-                    ),
-                  ),
-                  Center(
-                    child: Text(
-                      '운동레벨 : ${waitingRoom[index]['level']}',
-                      style: ts,
-                    ),
-                  ),
-                  Center(
-                    child: Text(
-                      '현재 사용자와의 거리 : ${distance}km',
-                      style: ts,
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+          )),
     );
   }
 }

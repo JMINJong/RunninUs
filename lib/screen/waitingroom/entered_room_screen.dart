@@ -3,7 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/const/dummy.dart';
-import 'package:runnin_us/googlemap/on_runnin.dart';
+import 'package:runnin_us/screen/exercise/on_runnin.dart';
 import 'package:runnin_us/provider/enter_check.dart';
 
 //대기실 내부 화면
@@ -21,10 +21,11 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
 
   @override
   Widget build(BuildContext context) {
-    List members = enteredWaitingRoom['member'].values.toList();
+    List members = myEnteredRoom['member'];
+    int memberCount=int.parse(myEnteredRoom['maxMember']);
     _enterCheck = Provider.of<EnterCheck>(context);
-    LatLng initialLatLng = LatLng(double.parse(enteredWaitingRoom['latitude']),
-        double.parse(enteredWaitingRoom['longitude']));
+    LatLng initialLatLng = LatLng(double.parse(myEnteredRoom['latitude']),
+        double.parse(myEnteredRoom['longitude']));
     CameraPosition initialCameraPosition =
         CameraPosition(target: initialLatLng, zoom: 15);
     Marker initialMarker = Marker(
@@ -37,7 +38,7 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
         Padding(
           padding: const EdgeInsets.only(top: 16.0),
           child: Container(
-            width: MediaQuery.of(context).size.width / 2,
+            // width: MediaQuery.of(context).size.width / 2,
             decoration: BoxDecoration(
               border: Border.all(color: MINT_COLOR, width: 3),
               borderRadius: BorderRadius.circular(8.0),
@@ -45,7 +46,7 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                '${enteredWaitingRoom['host']} 님의 대기실',
+                '${myEnteredRoom['host']} 님의 대기실',
                 style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w700),
                 textAlign: TextAlign.center,
               ),
@@ -57,6 +58,10 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
           child: SizedBox(
             height: MediaQuery.of(context).size.height / 3,
             child: GoogleMap(
+              onTap: (index) {
+                setState(() {
+                });
+              },
               initialCameraPosition: initialCameraPosition,
               markers: {initialMarker},
             ),
@@ -66,11 +71,11 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
-              '${enteredWaitingRoom['startTime']} ~ ${enteredWaitingRoom['endTime']}',
+              '${myEnteredRoom['startTime']} ~ ${myEnteredRoom['endTime']}',
               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
             ),
             Text(
-              ' 난이도 : ${enteredWaitingRoom['level']}',
+              ' 난이도 : ${myEnteredRoom['level']}',
               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
             ),
           ],
@@ -78,7 +83,7 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
         Column(
           children: members.map((e) {
             return SizedBox(
-                height: MediaQuery.of(context).size.height / 12,
+                height: MediaQuery.of(context).size.height / 24,
                 child: Center(
                   child: Text(
                     '참여자 : $e',
@@ -117,6 +122,8 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
                               style:
                                   ElevatedButton.styleFrom(primary: MINT_COLOR),
                               onPressed: () {
+                                myEnteredRoom['member'].clear();
+
                                 _enterCheck.Exit();
                                 Navigator.of(context).pop();
                               },
@@ -130,38 +137,42 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: MINT_COLOR),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) {
-                      return AlertDialog(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        title: Text('운동 시작'),
-                        content: Text('운동을 시작하시겠습니까?'),
-                        actions: [
-                          ElevatedButton(
-                              style:
-                                  ElevatedButton.styleFrom(primary: PINK_COLOR),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text('취소')),
-                          ElevatedButton(
-                              style:
-                                  ElevatedButton.styleFrom(primary: MINT_COLOR),
-                              onPressed: () {
-                                Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (_) => OnRunningScreen()));
-                              },
-                              child: Text('확인'))
-                        ],
-                      );
-                    },
-                  );
-                },
+                onPressed: _enterCheck.isHost
+                    ? () {
+                        showDialog(
+                          context: context,
+                          builder: (_) {
+                            return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              title: Text('운동 시작'),
+                              content: Text('운동을 시작하시겠습니까?'),
+                              actions: [
+                                ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        primary: PINK_COLOR),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('취소')),
+                                ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        primary: MINT_COLOR),
+                                    onPressed: () {
+                                      _enterCheck.StartRoom();
+                                      Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                              builder: (_) =>
+                                                  OnRunningScreen()));
+                                    },
+                                    child: Text('확인'))
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    : null,
                 child: Text('시작하기'),
               ),
             ],

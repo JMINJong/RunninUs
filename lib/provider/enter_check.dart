@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class EnterCheck extends ChangeNotifier {
   bool isEntered = false;
   bool isCreatedRoom=false;
+  bool isHost=false;
 
   void Enter() {
     isEntered = true;
@@ -11,6 +12,7 @@ class EnterCheck extends ChangeNotifier {
 
   void Exit() {
     isEntered = false;
+    isHost=false;
     notifyListeners();
   }
 
@@ -27,7 +29,20 @@ class EnterCheck extends ChangeNotifier {
   void CreateRoom(){
     isCreatedRoom=false;
     isEntered=true;
+    isHost=true;
     notifyListeners();
   }
+  void StartRoom(){
+    print('방 시작');
+    isEntered = false;
+    isHost=false;
+    notifyListeners();
+  }
+
+  void refreshScreen(){
+    notifyListeners();
+  }
+
+
 
 }
