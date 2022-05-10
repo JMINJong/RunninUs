@@ -36,8 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: onWillPop,
-      child: SafeArea(
-        child: Scaffold(
+      child: Scaffold(
           appBar: AppBar(
             title: Text('RunninUs'),
             centerTitle: true,
@@ -45,24 +44,25 @@ class _HomeScreenState extends State<HomeScreen> {
             backgroundColor: mainColor,
           ),
           bottomNavigationBar: _bottomNavi(),
-          body: PageView(
-            controller: pageController,
-            onPageChanged: (int index) {
-              setState(() {
-                currentindex = index;
-                if (index == 0) {
-                  print('데이터 받아오기');
-                }
-              });
-            },
-            children: [
-              MainScreen(),
-              ReservedRoomScreen(),
-              MyPageScreen(),
-              StoreScreen(),
-            ],
+          body: SafeArea(
+            child: PageView(
+              controller: pageController,
+              onPageChanged: (int index) {
+                setState(() {
+                  currentindex = index;
+                  if (index == 0) {
+                    print('데이터 받아오기');
+                  }
+                });
+              },
+              children: [
+                MainScreen(),
+                ReservedRoomScreen(),
+                MyPageScreen(),
+                StoreScreen(),
+              ],
+            ),
           ),
-        ),
       ),
     );
   }
