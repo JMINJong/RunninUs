@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:provider/provider.dart';
 import 'package:runnin_us/const/color.dart';
-import 'package:runnin_us/provider/enter_check.dart';
 import 'package:runnin_us/screen/main/main_screen.dart';
 import 'package:runnin_us/screen/main/my_page_screen.dart';
 import 'package:runnin_us/screen/main/reserved_room_screen.dart';
@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
     initialPage: 0,
     keepPage: true,
   );
-
+  DateTime? currentBackPressTime;
 
   @override
   void initState() {
@@ -34,31 +34,34 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('RunninUs'),
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-          backgroundColor: mainColor,
-        ),
-        bottomNavigationBar: _bottomNavi(),
-        body: PageView(
-          controller: pageController,
-          onPageChanged: (int index) {
-            setState(() {
-              currentindex = index;
-              if (index == 0) {
-                print('데이터 받아오기');
-              }
-            });
-          },
-          children: [
-            MainScreen(),
-            ReservedRoomScreen(),
-            MyPageScreen(),
-            StoreScreen(),
-          ],
+    return WillPopScope(
+      onWillPop: onWillPop,
+      child: SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('RunninUs'),
+            centerTitle: true,
+            automaticallyImplyLeading: false,
+            backgroundColor: mainColor,
+          ),
+          bottomNavigationBar: _bottomNavi(),
+          body: PageView(
+            controller: pageController,
+            onPageChanged: (int index) {
+              setState(() {
+                currentindex = index;
+                if (index == 0) {
+                  print('데이터 받아오기');
+                }
+              });
+            },
+            children: [
+              MainScreen(),
+              ReservedRoomScreen(),
+              MyPageScreen(),
+              StoreScreen(),
+            ],
+          ),
         ),
       ),
     );
@@ -88,5 +91,21 @@ class _HomeScreenState extends State<HomeScreen> {
             label: '스토어', icon: Icon(Icons.local_grocery_store)),
       ],
     );
+  }
+
+  Future<bool> onWillPop() async {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      Fluttertoast.showToast(
+          msg: "'뒤로' 버튼을 한번 더 누르시면 종료됩니다.",
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: const Color(0xff6E6E6E),
+          fontSize: 20,
+          toastLength: Toast.LENGTH_SHORT);
+      return false;
+    }
+    return true;
   }
 }
