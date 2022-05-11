@@ -5,21 +5,18 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:latlong2/latlong.dart' as d;
 import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/const/dummy.dart';
-import 'package:runnin_us/screen/exercise/exercise_result.dart';
+import 'package:runnin_us/screen/exercise/authentication_result.dart';
 
-//운동 중 화면
-
-
-
-
-class OnRunningScreen extends StatefulWidget {
-  const OnRunningScreen({Key? key}) : super(key: key);
+class ExerciseAuthentication extends StatefulWidget {
+  const ExerciseAuthentication({Key? key}) : super(key: key);
 
   @override
-  _OnRunningScreenState createState() => _OnRunningScreenState();
+  _ExerciseAuthenticationState createState() =>
+      _ExerciseAuthenticationState();
 }
 
-class _OnRunningScreenState extends State<OnRunningScreen> {
+class _ExerciseAuthenticationState
+    extends State<ExerciseAuthentication> {
   int kiloMeter = 0;
   int movePathIndex = 0;
   int timeCountIndex = 0;
@@ -35,7 +32,9 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
   bool camera = false;
   List<LatLng> movePath = [];
   List<double> count = [0, 0];
+  Set<Polyline> polyLineForAuth = {};
   late GoogleMapController mapController;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -55,9 +54,9 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                       child: CircularProgressIndicator(),
                     );
                   }
-                  currentPosition=snapshot.data;
+                  currentPosition = snapshot.data;
                   movePath.clear();
-                  polyline.clear();
+                  polyLineForAuth.clear();
                   final startTime = DateTime.now();
                   movePathIndex = 0;
 
@@ -71,22 +70,44 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                         );
                       }
                       endTime = DateTime.now();
-                      // print(myEnteredRoom['endTime']);
-                      // print(endTime);
-                      // print(
-                      //     '${endTime.hour.toString().padLeft(2, '0')}:${endTime.minute.toString().padLeft(2, '0')}');
-                      if (myEnteredRoom['endTime'] ==
-                          '${endTime.hour.toString().padLeft(2, '0')}:${endTime.minute.toString().padLeft(2, '0')}') {
-                        resultExercise['totalLength'] =
+                      if (totalLengthForSpeed>=1000) {
+                        exerciseAuthentication['totalLength'] =
                             totalLengthForSpeed.toString();
-                        resultExercise['totalTime'] =
-                            totalTime.toString().split('.')[0];
-                        resultExercise['averageSpeed'] =
+                        exerciseAuthentication['totalTime'] =
+                        totalTime.toString().split('.')[0];
+                        exerciseAuthentication['averageSpeed'] =
                             nowSpeed.toStringAsFixed(1);
-                        resultExercise['kcal'] =
-                            (totalHour * 0.1225).toStringAsFixed(2);
+
+
+                        if(nowSpeed<8.28){
+                          exerciseAuthentication['level']='1';
+                        }else if(nowSpeed>=8.28 && nowSpeed < 9.72){
+                          exerciseAuthentication['level']='2';
+                        }else if(nowSpeed>=9.72 && nowSpeed < 11.88){
+                          exerciseAuthentication['level']='3';
+                        }else if(nowSpeed>=11.88 && nowSpeed < 14.4){
+                          exerciseAuthentication['level']='4';
+                        }else if(nowSpeed>=14.4 && nowSpeed < 16.2){
+                          exerciseAuthentication['level']='5';
+                        }else if(nowSpeed>=16.2 && nowSpeed < 18){
+                          exerciseAuthentication['level']='6';
+                        }else if(nowSpeed>=18 && nowSpeed < 19.8){
+                          exerciseAuthentication['level']='7';
+                        }else if(nowSpeed>=19.8 && nowSpeed < 21.6){
+                          exerciseAuthentication['level']='8';
+                        }else if(nowSpeed>=21.6 && nowSpeed < 23.6){
+                          exerciseAuthentication['level']='9';
+                        }else if(nowSpeed>=23.6){
+                          exerciseAuthentication['level']='10';
+                        }
+
+
+
+
+
+
                         Fluttertoast.showToast(
-                            msg: "운동 종료! 곧 결과 페이지로 이동합니다.",
+                            msg: "검증 종료! 곧 결과 페이지로 이동합니다.",
                             toastLength: Toast.LENGTH_LONG,
                             gravity: ToastGravity.CENTER,
                             timeInSecForIosWeb: 1,
@@ -97,7 +118,7 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                           (value) {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                builder: (_) => ExerciseResult(),
+                                builder: (_) => AuthenticationResult(),
                               ),
                             );
                           },
@@ -105,46 +126,25 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                       }
 
                       totalTime = startTime.difference(endTime);
-                      // print('현재 위치 : ${snapshot.data}');
-                      // print('현재 달린 거리 :${kiloMeter}km ${totalLength} m');
-                      // print('시작 시간 : $startTime');
-                      // print('현재 시간 : $endTime');
-                      // print('달린 시간 : $totalTime');
-                      // print('총 걸린 시간 : $totalHour');
-                      // print('현재 인덱스 값 : $movePathIndex');
 
                       Position po = snapshot.data;
                       LatLng laln = LatLng(po.latitude, po.longitude);
                       movePath.add(laln);
-                      polyline.add(
+                      polyLineForAuth.add(
                         Polyline(
                             polylineId: PolylineId(snapshot.data.toString()),
                             visible: true,
                             points: movePath,
                             color: Colors.blue),
                       );
-                      // if(timeCountIndex==0){
-                      //   timeCountIndex++;
-                      //   timeCountStart=1;
-                      //   timeCountEnd=0;
-                      // }else{
-                      //   timeCountIndex--;
-                      //   timeCountStart=0;
-                      //   timeCountEnd=1;
-                      // }
-                      // count 위젯 사용해서 숫자 올리기 -> 맘처럼 잘 안됨;
-                      // count[timeCountIndex]=double.parse(totalTime.inSeconds.toString())*-1;
-                      // print(timeCountIndex);
-                      // print(count);
+
                       int hours =
                           int.parse(totalTime.toString().split(':')[0]) * 3600;
                       int minutes =
                           int.parse(totalTime.toString().split(':')[1]) * 60;
                       int seconds = int.parse(
                           totalTime.toString().split(':')[2].split('.')[0]);
-                      // print(hours);
-                      // print(minutes);
-                      // print(seconds);
+
                       totalHour = hours + minutes + seconds;
 
                       if (movePathIndex >= 1) {
@@ -187,17 +187,19 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                                 initialCameraPosition:
                                     CameraPosition(target: laln, zoom: 17),
                                 markers: {
-                                  Marker(markerId: MarkerId('m'), position: laln)
+                                  Marker(
+                                      markerId: MarkerId('m'), position: laln)
                                 },
                                 onMapCreated: (controller) {
                                   mapController = controller;
                                 },
-                                polylines: polyline,
+                                polylines: polyLineForAuth,
                               ),
                             ),
                             Expanded(
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   kilo
                                       ? renderContainer(
@@ -215,7 +217,8 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                                       alignment: Alignment.center,
                                       width: MediaQuery.of(context).size.width,
                                       height:
-                                          MediaQuery.of(context).size.height / 12,
+                                          MediaQuery.of(context).size.height /
+                                              12,
                                       decoration: BoxDecoration(
                                         border: Border.all(
                                             color: MINT_COLOR, width: 2),
@@ -228,13 +231,15 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                                                 context: context,
                                                 builder: (_) {
                                                   return AlertDialog(
-                                                    shape: RoundedRectangleBorder(
+                                                    shape:
+                                                        RoundedRectangleBorder(
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               10.0),
                                                     ),
-                                                    title: Text('운동 취소'),
-                                                    content: Text('정말로 나가시겠습니까?'),
+                                                    title: Text('검층 취소'),
+                                                    content:
+                                                        Text('운동 검증을 취소하시겠습니까?'),
                                                     actions: [
                                                       ElevatedButton(
                                                           style: ElevatedButton
@@ -242,7 +247,8 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                                                                   primary:
                                                                       PINK_COLOR),
                                                           onPressed: () {
-                                                            Navigator.of(context)
+                                                            Navigator.of(
+                                                                    context)
                                                                 .pop();
                                                           },
                                                           child: Text('취소')),
@@ -252,9 +258,11 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                                                                   primary:
                                                                       MINT_COLOR),
                                                           onPressed: () {
-                                                            Navigator.of(context)
+                                                            Navigator.of(
+                                                                    context)
                                                                 .pop();
-                                                            Navigator.of(context)
+                                                            Navigator.of(
+                                                                    context)
                                                                 .pop();
                                                           },
                                                           child: Text('확인'))
@@ -267,80 +275,7 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                                               primary: PINK_COLOR,
                                               minimumSize: Size(75, 37),
                                             ),
-                                            child: Text('운동 취소'),
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (_) {
-                                                  return AlertDialog(
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0),
-                                                    ),
-                                                    title: Text('운동 종료'),
-                                                    content:
-                                                        Text('정말로 종료하시겠습니까?'),
-                                                    actions: [
-                                                      ElevatedButton(
-                                                          style: ElevatedButton
-                                                              .styleFrom(
-                                                                  primary:
-                                                                      PINK_COLOR),
-                                                          onPressed: () {
-                                                            Navigator.of(context)
-                                                                .pop();
-                                                          },
-                                                          child: Text('취소')),
-                                                      ElevatedButton(
-                                                          style: ElevatedButton
-                                                              .styleFrom(
-                                                                  primary:
-                                                                      MINT_COLOR),
-                                                          onPressed: () {
-                                                            resultExercise[
-                                                                    'totalLength'] =
-                                                                totalLengthForSpeed
-                                                                    .toString();
-                                                            resultExercise[
-                                                                    'totalTime'] =
-                                                                totalTime
-                                                                    .toString()
-                                                                    .split(
-                                                                        '.')[0];
-                                                            resultExercise[
-                                                                    'averageSpeed'] =
-                                                                nowSpeed
-                                                                    .toStringAsFixed(
-                                                                        1);
-                                                            resultExercise[
-                                                                    'kcal'] =
-                                                                (totalHour *
-                                                                        0.1225)
-                                                                    .toStringAsFixed(
-                                                                        2);
-                                                            Navigator.of(context)
-                                                                .pop();
-                                                            Navigator.of(context)
-                                                                .pushReplacement(
-                                                              MaterialPageRoute(
-                                                                builder: (_) =>
-                                                                    ExerciseResult(),
-                                                              ),
-                                                            );
-                                                          },
-                                                          child: Text('확인'))
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              primary: MINT_COLOR,
-                                            ),
-                                            child: Text('운동 종료'),
+                                            child: Text('검증 취소'),
                                           ),
                                         ],
                                         mainAxisAlignment:
@@ -348,12 +283,6 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                                       ),
                                     ),
                                   ),
-
-                                  // Countup(
-                                  //   begin: count[timeCountEnd],
-                                  //   end: count[timeCountStart],
-                                  //   duration: Duration(seconds: 2),
-                                  // ),
                                 ],
                               ),
                             )
