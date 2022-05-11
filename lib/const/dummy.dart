@@ -102,19 +102,14 @@ Map myEnteredRoom = {
   'endTime': '',
   'level': '',
   'mamMember': '',
-  'member': [
-    '전민종',
-    '이준희',
-    '김효재',
-    '정민혁'
-  ],
+  'member': ['전민종', '이준희', '김효재', '정민혁'],
 };
 
-Map resultExercise={
-  'totalLength':'',
-  'totalTime':'',
-  'averageSpeed':'',
-  'kcal':'',
+Map resultExercise = {
+  'totalLength': '',
+  'totalTime': '',
+  'averageSpeed': '',
+  'kcal': '',
 };
 //사용자 메인화면 진입시 찍히는 현재 위치
 Position? currentPosition;
@@ -122,4 +117,10 @@ Position? currentPosition;
 //사용자 운동중 생기는 경로 집합
 Set<Polyline> polyline = {};
 
-
+//운동검증에 필요한 데이터
+Map exerciseAuthentication = {
+  'totalLength': '',
+  'totalTime': '',
+  'averageSpeed': '',
+  'level':'',
+};
