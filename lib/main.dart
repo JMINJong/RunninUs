@@ -16,6 +16,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String text = '네이버';
+
+  @override
+  void initState() {
+    getHttp(text);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: () {
                           setState(() {
                             getHttp(text);
-                             print(text);
+                            print(text);
                           });
                         },
                         child: Text('검색'))
@@ -86,11 +93,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 return Column(
                                   children: [
                                     Container(
-
                                       child: Text(snapshot.data
                                           .toList()
                                           .asMap()[index]['title']),
-                                      decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+                                      decoration: BoxDecoration(
+                                          border:
+                                              Border.all(color: Colors.black)),
                                     ),
                                     Text(snapshot.data.toList().asMap()[index]
                                         ['link']),
