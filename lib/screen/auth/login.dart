@@ -2,11 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:runnin_us/provider/enter_check.dart';
 import 'package:runnin_us/screen/main/home_screen.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-
-void main(){
-  KakaoSdk.init(nativeAppKey: '58b636141acc87e8a31b06d844add97d');
-}
 
 
 class LoginScreen extends StatelessWidget {
