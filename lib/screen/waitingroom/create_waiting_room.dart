@@ -341,7 +341,8 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
                         _enterCheck.CancelCreateRoom();
                       },
                       style: ElevatedButton.styleFrom(
-                          primary: PINK_COLOR, minimumSize: Size(75, 37)),
+                          primary: PINK_COLOR, minimumSize: Size(75, 37)
+                      ),
                       child: Text('취소'),
                     ),
                     ElevatedButton(
