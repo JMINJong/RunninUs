@@ -8,7 +8,9 @@ class MyPageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).disableAnimations;
-    return Scaffold(body: renderPageList(list: myPageList, index: 0));
+    return Scaffold(
+        body: renderPageList(list: myPageList, index: 0)
+    );
   }
 
   Widget renderPageList({
@@ -19,8 +21,9 @@ class MyPageScreen extends StatelessWidget {
       children: [
         Card(
             child: ListTile(
-          title: Center(child: Text('${myPageList[index]['name']}')),
-        )),
+              title: Center(child: Text('${myPageList[index]['name']}')),
+            )
+        ),
         Card(
           child: ListTile(
             title: Center(child: Text('${myPageList[index]['age']}')),
@@ -28,30 +31,35 @@ class MyPageScreen extends StatelessWidget {
         ),
         Card(
             child: ListTile(
-          title: Center(child: Text('${myPageList[index]['location']}')),
-        )),
+              title: Center(child: Text('${myPageList[index]['location']}')),
+            )
+        ),
         Card(
             child: ListTile(
-          title: Center(child: Text('${myPageList[index]['level']}')),
-        )),
+              title: Center(child: Text('${myPageList[index]['level']}')),
+            )
+        ),
         Card(
             child: ListTile(
-          title: Center(child: Text('${myPageList[index]['score']}')),
-        )),
+              title: Center(child: Text('${myPageList[index]['score']}')),
+            )
+        ),
         Card(
             child: ListTile(
-          title: Center(child: Text('${myPageList[index]['recent']}')),
-        )),
+              title: Center(child: Text('${myPageList[index]['recent']}')),
+            )
+        ),
         Card(
             child: ListTile(
-          title: Center(child: Text('${myPageList[index]['point']}')),
-        )),
+              title: Center(child: Text('${myPageList[index]['point']}')),
+            )
+        ),
         ElevatedButton(
-            style: ElevatedButton.styleFrom(primary: MINT_COLOR),
-            onPressed: () {
+            onPressed: (){
               //
             },
-            child: Text('재인증')),
+            child: Text('재인증')
+        ),
       ],
       padding: EdgeInsets.all(10),
       shrinkWrap: true,
