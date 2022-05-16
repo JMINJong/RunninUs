@@ -7,8 +7,6 @@ import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/const/dummy.dart';
 import 'package:runnin_us/provider/enter_check.dart';
 import 'package:runnin_us/screen/exercise/exercise_authentication.dart';
-import 'dart:developer';
-
 
 const TextStyle ts = TextStyle(
   color: Colors.white,
