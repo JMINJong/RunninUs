@@ -7,6 +7,7 @@ class MyPageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).disableAnimations;
     return Scaffold(
         body: renderPageList(list: myPageList, index: 0)
     );
@@ -16,90 +17,52 @@ class MyPageScreen extends StatelessWidget {
     required List list,
     required int index,
   }) {
-    return Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              margin: const EdgeInsets.all(30.0),
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                border: Border.all(color: MINT_COLOR.withOpacity(0.7))),
-              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Text('${myPageList[index]['name']}'),
-              ]),
-            ),
-            Container(
-              margin: const EdgeInsets.all(30.0),
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                  border: Border.all(color: MINT_COLOR.withOpacity(0.7))),
-              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Text('${myPageList[index]['age']}'),
-              ]),
-            ),
-            Container(
-              margin: const EdgeInsets.all(30.0),
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                  border: Border.all(color: MINT_COLOR.withOpacity(0.7))),
-              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Text('${myPageList[index]['location']}'),
-              ]),
-            ),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.all(30.0),
-                  padding: const EdgeInsets.fromLTRB(170, 8, 70, 8),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: MINT_COLOR.withOpacity(0.7))),
-                  child: Row(mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('${myPageList[index]['level']}'),
-                      ]),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(3),
-                  margin: const EdgeInsets.fromLTRB(0, 8, 10, 8),
-                  child: ElevatedButton(
-                      onPressed: (){},
-                      child: Text('재인증')),
-                )
-              ],
-            ),
-
-            Container(
-              margin: const EdgeInsets.all(30.0),
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                  border: Border.all(color: MINT_COLOR.withOpacity(0.7))),
-               child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                 Text('${myPageList[index]['score']}'),
-               ]),
-            ),
-            Container(
-              margin: const EdgeInsets.all(30.0),
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                  border: Border.all(color: MINT_COLOR.withOpacity(0.7))),
-              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Text('${myPageList[index]['recent']}'),
-              ]),
-            ),
-            Container(
-              margin: const EdgeInsets.all(30.0),
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                  border: Border.all(color: MINT_COLOR.withOpacity(0.7))),
-              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Text('${myPageList[index]['point']}'),
-              ]),
+    return ListView(
+      children: [
+        Card(
+            child: ListTile(
+              title: Center(child: Text('${myPageList[index]['name']}')),
             )
-          ],
-        ));
+        ),
+        Card(
+          child: ListTile(
+            title: Center(child: Text('${myPageList[index]['age']}')),
+          ),
+        ),
+        Card(
+            child: ListTile(
+              title: Center(child: Text('${myPageList[index]['location']}')),
+            )
+        ),
+        Card(
+            child: ListTile(
+              title: Center(child: Text('${myPageList[index]['level']}')),
+            )
+        ),
+        Card(
+            child: ListTile(
+              title: Center(child: Text('${myPageList[index]['score']}')),
+            )
+        ),
+        Card(
+            child: ListTile(
+              title: Center(child: Text('${myPageList[index]['recent']}')),
+            )
+        ),
+        Card(
+            child: ListTile(
+              title: Center(child: Text('${myPageList[index]['point']}')),
+            )
+        ),
+        ElevatedButton(
+            onPressed: (){
+              //
+            },
+            child: Text('재인증')
+        ),
+      ],
+      padding: EdgeInsets.all(10),
+      shrinkWrap: true,
+    );
   }
 }

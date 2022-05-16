@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 List waitingRoom = [
   {
-    'host': 'jeon min jong',
+    'host': 'jeon minjong',
     'latitude': '37.435288',
     'longitude': '127.1385',
     'level': '4',
@@ -20,7 +20,7 @@ List waitingRoom = [
     ],
   },
   {
-    'host': 'jeon min jong',
+    'host': 'jeon minjong',
     'latitude': '37.435288',
     'longitude': '127.1385',
     'level': '4',
@@ -35,7 +35,7 @@ List waitingRoom = [
     ],
   },
   {
-    'host': 'jeon min jong',
+    'host': 'jeon minjong',
     'latitude': '37.435288',
     'longitude': '127.1385',
     'level': '9',
@@ -52,7 +52,7 @@ List waitingRoom = [
 //이름, 나이, 위치, 부여받은 등급, 매너점수, 마지막 등급 측정 기록, 현재 보유중 포인트
 List myPageList = [
   {
-    'name': 'lee jun hee',
+    'name': '이준희',
     'age': '25',
     'location': '성남',
     'level': '4',
