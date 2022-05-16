@@ -124,11 +124,17 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
         d.LatLng(latlng.latitude, latlng.longitude),
         d.LatLng(data.latitude, data.longitude));
     bool levelTooHigh=false;
+    bool isRoomFull = false;
 
-    if(int.parse(waitingRoom[index]['level']) >
-        int.parse(myPageList[0]['level'])){
+
+    if(int.parse(waitingRoom[index]['level']) > int.parse(myPageList[0]['level'])){
       levelTooHigh=true;
     }
+
+    if(waitingRoom[index]['member'].length + 1 == int.parse(waitingRoom[index]['maxMember'])){
+      isRoomFull=true;
+    }
+
 
     return GestureDetector(
       onTap: () {
@@ -293,9 +299,14 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(
-                        '${waitingRoom[index]['member'].length + 1} / ${waitingRoom[index]['maxMember']}',
-                        style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),
+                      Center(
+                        child: isRoomFull?Text(
+                          '${waitingRoom[index]['member'].length + 1} / ${waitingRoom[index]['maxMember']}',
+                          style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20, color: Colors.red),
+                        ):Text(
+                          '${waitingRoom[index]['member'].length + 1} / ${waitingRoom[index]['maxMember']}',
+                          style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),
+                        ),
                       ),
                       Text(
                         '$distance km',
