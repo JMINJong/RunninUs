@@ -55,9 +55,6 @@ class MyPageScreen extends StatelessWidget {
             )
         ),
         ElevatedButton(
-          style : ElevatedButton.styleFrom(
-            primary: MINT_COLOR
-    ),
             onPressed: (){
               //
             },
