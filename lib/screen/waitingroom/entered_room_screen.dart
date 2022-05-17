@@ -22,7 +22,7 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
   @override
   Widget build(BuildContext context) {
     List members = myEnteredRoom['member'];
-    int memberCount=int.parse(myEnteredRoom['maxMember']);
+    int memberCount = int.parse(myEnteredRoom['maxMember']);
     _enterCheck = Provider.of<EnterCheck>(context);
     LatLng initialLatLng = LatLng(double.parse(myEnteredRoom['latitude']),
         double.parse(myEnteredRoom['longitude']));
@@ -32,70 +32,103 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
       markerId: MarkerId('WaitingRoomMarker'),
       position: initialLatLng,
     );
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 16.0),
-          child: Container(
-            // width: MediaQuery.of(context).size.width / 2,
-            decoration: BoxDecoration(
-              border: Border.all(color: MINT_COLOR, width: 3),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                '${myEnteredRoom['host']} 님의 대기실',
-                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w700),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height / 3,
-            child: GoogleMap(
-              onTap: (index) {
-                setState(() {
-                });
-              },
-              initialCameraPosition: initialCameraPosition,
-              markers: {initialMarker},
-            ),
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              '${myEnteredRoom['startTime']} ~ ${myEnteredRoom['endTime']}',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
-            ),
-            Text(
-              ' 난이도 : ${myEnteredRoom['level']}',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
-            ),
-          ],
-        ),
-        Column(
-          children: members.map((e) {
-            return SizedBox(
-                height: MediaQuery.of(context).size.height / 24,
-                child: Center(
-                  child: Text(
-                    '참여자 : $e',
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height - kToolbarHeight - 170,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: MINT_COLOR, width: 3),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        '${myEnteredRoom['roomName']}',
+                        style: TextStyle(
+                            fontSize: 30.0, fontWeight: FontWeight.w700),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  SizedBox(
+                    height:
+                        MediaQuery.of(context).size.height / 2 - kToolbarHeight,
+                    child: GoogleMap(
+                      onTap: (index) {
+                        setState(() {});
+                      },
+                      initialCameraPosition: initialCameraPosition,
+                      markers: {initialMarker},
+                    ),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Text(
+                    '운동 시간 : ${myEnteredRoom['startTime']} ~  ${myEnteredRoom['endTime']}',
                     style:
                         TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
                   ),
-                ));
-          }).toList(),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        ' 난이도 : ${myEnteredRoom['level']}',
+                        style: TextStyle(
+                            fontSize: 20.0, fontWeight: FontWeight.w500),
+                      ),
+                      Text(
+                        ' 주행 거리 : ${myEnteredRoom['runningLength']} km',
+                        style: TextStyle(
+                            fontSize: 20.0, fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Text(
+                    '호스트 : ${myEnteredRoom['host']}',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Column(
+                    children: members.map(
+                      (e) {
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height / 24,
+                          child: Center(
+                            child: Text(
+                              '참여자 : $e',
+                              style: TextStyle(
+                                  fontSize: 20.0, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        );
+                      },
+                    ).toList(),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ElevatedButton(
@@ -177,8 +210,8 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
               ),
             ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
