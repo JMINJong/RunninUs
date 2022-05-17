@@ -5,9 +5,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 List waitingRoom = [
   {
+    'roomName':'어서오세요',
     'host': 'jeon minjong',
     'latitude': '37.435288',
     'longitude': '127.1385',
+    'runningLength':5,
     'level': '4',
     'startTime': '17:30',
     'endTime': '18:30',
@@ -20,9 +22,11 @@ List waitingRoom = [
     ],
   },
   {
+    'roomName':'달려봅시다',
     'host': 'jeon minjong',
     'latitude': '37.435288',
     'longitude': '127.1385',
+    'runningLength':8,
     'level': '4',
     'startTime': '17:30',
     'endTime': '18:30',
@@ -35,9 +39,11 @@ List waitingRoom = [
     ],
   },
   {
+    'roomName':'초보자 환영',
     'host': 'jeon minjong',
     'latitude': '37.435288',
     'longitude': '127.1385',
+    'runningLength':15,
     'level': '9',
     'startTime': '17:30',
     'endTime': '18:30',
@@ -95,10 +101,12 @@ int myPoint = 3000;
 // };
 
 Map myEnteredRoom = {
+  'roomName':'',
   'host': '',
   'latitude': '',
   'longitude': '',
   'startTime': '',
+  'runningLength':'',
   'endTime': '',
   'level': '',
   'mamMember': '',
