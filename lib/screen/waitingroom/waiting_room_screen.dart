@@ -83,7 +83,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                   );
                 }
                 LatLng nowLatLng =
-                    LatLng(snapshot.data.latitude, snapshot.data.longitude);
+                LatLng(snapshot.data.latitude, snapshot.data.longitude);
 
                 print(nowLatLng);
                 return RefreshIndicator(
@@ -93,9 +93,9 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                   },
                   child: ListView.separated(
                       itemBuilder: (
-                        context,
-                        index,
-                      ) {
+                          context,
+                          index,
+                          ) {
                         return renderWaitingRoom(
                           index,
                           nowLatLng,
@@ -124,14 +124,14 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
   }
 
   renderWaitingRoom(
-    int index,
-    LatLng data,
-  ) {
+      int index,
+      LatLng data,
+      ) {
     final LatLng latlng = LatLng(double.parse(waitingRoom[index]['latitude']),
         double.parse(waitingRoom[index]['longitude']));
     final CameraPosition cp = CameraPosition(target: latlng, zoom: 17);
     final Marker marker =
-        Marker(markerId: MarkerId('marker$index'), position: latlng);
+    Marker(markerId: MarkerId('marker$index'), position: latlng);
     final double distance = d.Distance().as(
         d.LengthUnit.Kilometer,
         d.LatLng(latlng.latitude, latlng.longitude),
@@ -223,18 +223,18 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                       onPressed: () {
                         //waitingRoom[index]['member'].add(myPageList[0]['name']);
                         myEnteredRoom['roomName'] =
-                            waitingRoom[index]['roomName'];
+                        waitingRoom[index]['roomName'];
                         myEnteredRoom['host'] = waitingRoom[index]['host'];
                         myEnteredRoom['latitude'] =
-                            waitingRoom[index]['latitude'];
+                        waitingRoom[index]['latitude'];
                         myEnteredRoom['longitude'] =
-                            waitingRoom[index]['longitude'];
+                        waitingRoom[index]['longitude'];
                         myEnteredRoom['runningLength'] =
-                            waitingRoom[index]['runningLength'];
+                        waitingRoom[index]['runningLength'];
                         myEnteredRoom['startTime'] =
-                            waitingRoom[index]['startTime'];
+                        waitingRoom[index]['startTime'];
                         myEnteredRoom['endTime'] =
-                            waitingRoom[index]['endTime'];
+                        waitingRoom[index]['endTime'];
                         myEnteredRoom['level'] = waitingRoom[index]['level'];
 
                         waitingRoom[index]['member'].add(myPageList[0]['name']);
@@ -242,7 +242,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                           ...waitingRoom[index]['member']
                         ];
                         myEnteredRoom['maxMember'] =
-                            waitingRoom[index]['maxMember'];
+                        waitingRoom[index]['maxMember'];
 
                         _enterCheck.Enter();
                         Navigator.of(context).pop();
@@ -306,13 +306,13 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                       Center(
                         child: levelTooHigh
                             ? Text(
-                                '운동레벨 : ${waitingRoom[index]['level']}',
-                                style: ts.copyWith(color: Colors.red),
-                              )
+                          '운동레벨 : ${waitingRoom[index]['level']}',
+                          style: ts.copyWith(color: Colors.red),
+                        )
                             : Text(
-                                '운동레벨 : ${waitingRoom[index]['level']}',
-                                style: ts,
-                              ),
+                          '운동레벨 : ${waitingRoom[index]['level']}',
+                          style: ts,
+                        ),
                       ),
                       Text(
                         '운동 시간 : ${waitingRoom[index]['startTime']}~ ${waitingRoom[index]['endTime']}',
@@ -335,18 +335,18 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                         Center(
                             child: isRoomFull
                                 ? Text(
-                                    '${waitingRoom[index]['member'].length + 1} / ${waitingRoom[index]['maxMember']}',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 20,
-                                        color: Colors.red),
-                                  )
+                              '${waitingRoom[index]['member'].length + 1} / ${waitingRoom[index]['maxMember']}',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 20,
+                                  color: Colors.red),
+                            )
                                 : Text(
-                                    '${waitingRoom[index]['member'].length + 1} / ${waitingRoom[index]['maxMember']}',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 20),
-                                  )),
+                              '${waitingRoom[index]['member'].length + 1} / ${waitingRoom[index]['maxMember']}',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 20),
+                            )),
                         Text('$distance km',
                             style: TextStyle(
                                 fontWeight: FontWeight.w500, fontSize: 16))
