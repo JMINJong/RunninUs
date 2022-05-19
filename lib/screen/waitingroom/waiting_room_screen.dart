@@ -330,20 +330,27 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 3 / 12 - 16,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        '${waitingRoom[index]['member'].length + 1} / ${waitingRoom[index]['maxMember']}',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 20),
-                      ),
-                      Text(
-                        '$distance km',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 16),
-                      ),
-                    ],
-                  ),
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Center(
+                            child: isRoomFull
+                                ? Text(
+                                    '${waitingRoom[index]['member'].length + 1} / ${waitingRoom[index]['maxMember']}',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 20,
+                                        color: Colors.red),
+                                  )
+                                : Text(
+                                    '${waitingRoom[index]['member'].length + 1} / ${waitingRoom[index]['maxMember']}',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 20),
+                                  )),
+                        Text('$distance km',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 16))
+                      ]),
                 )
               ],
             ),
