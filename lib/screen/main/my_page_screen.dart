@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/const/dummy.dart';
+import 'package:runnin_us/screen/exercise/exercise_authentication.dart';
 
 class MyPageScreen extends StatelessWidget {
   const MyPageScreen({Key? key}) : super(key: key);
@@ -9,13 +10,14 @@ class MyPageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).disableAnimations;
     return Scaffold(
-        body: renderPageList(list: myPageList, index: 0)
+        body: renderPageList(list: myPageList, index: 0,context: context)
     );
   }
 
   Widget renderPageList({
     required List list,
     required int index,
+    required BuildContext context,
   }) {
     return ListView(
       children: [
@@ -59,7 +61,8 @@ class MyPageScreen extends StatelessWidget {
                 primary: MINT_COLOR
             ),
             onPressed: (){
-              //
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => ExerciseAuthentication()));
             },
             child: Text('재인증')
         ),
