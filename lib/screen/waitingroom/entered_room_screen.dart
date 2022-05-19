@@ -22,7 +22,7 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
   @override
   Widget build(BuildContext context) {
     List members = myEnteredRoom['member'];
-    int memberCount = int.parse(myEnteredRoom['maxMember']);
+    // int memberCount = int.parse(myEnteredRoom['maxMember']);
     _enterCheck = Provider.of<EnterCheck>(context);
     LatLng initialLatLng = LatLng(double.parse(myEnteredRoom['latitude']),
         double.parse(myEnteredRoom['longitude']));
