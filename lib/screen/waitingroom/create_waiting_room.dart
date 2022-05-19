@@ -10,7 +10,7 @@ import '../../provider/enter_check.dart';
 
 List selectedButtonLevel = [1, 2, 3, 4, 5];
 List selectedButtonLevel2 = [6, 7, 8, 9, 10];
-List maxNumber = [2, 3, 4, 5, 6];
+List maxNumber = [2, 3, 4, 5];
 
 class CreateWaitingRoom extends StatefulWidget {
   const CreateWaitingRoom({Key? key}) : super(key: key);
@@ -346,7 +346,7 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
                                         selectedLevel = e.toString();
                                       });
                                     },
-                                    child: Text('level $e'),
+                                    child: Text('Lv $e'),
                                   );
                                 },
                               ).toList()),
@@ -372,7 +372,7 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
                                         selectedLevel = e.toString();
                                       });
                                     },
-                                    child: Text('level $e'),
+                                    child: Text('Lv $e'),
                                   );
                                 },
                               ).toList()),
@@ -434,7 +434,7 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
                                         primary:
                                             isChecked ? PINK_COLOR : MINT_COLOR,
                                         shape: CircleBorder(),
-                                        minimumSize: Size(60, 60)),
+                                        minimumSize: Size(55, 55)),
                                     onPressed: () {
                                       setState(() {
                                         selectedMaxNumberIndex = e;

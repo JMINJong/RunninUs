@@ -5,7 +5,6 @@ import 'package:runnin_us/screen/auth/login.dart';
 import 'package:runnin_us/provider/enter_check.dart';
 import 'package:provider/provider.dart';
 
-
 // 인증 토큰 갱신하기
 Future<Dio> authDio(BuildContext context) async {
   var dio = Dio();
