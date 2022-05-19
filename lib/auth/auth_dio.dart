@@ -5,11 +5,12 @@ import 'package:runnin_us/screen/auth/login.dart';
 import 'package:runnin_us/provider/enter_check.dart';
 import 'package:provider/provider.dart';
 
-Future<Dio> authDio(context) async {
+
+// 인증 토큰 갱신하기
+Future<Dio> authDio(BuildContext context) async {
   var dio = Dio();
 
   final storage = new FlutterSecureStorage();
-
 
   dio.interceptors.clear();
 
@@ -42,7 +43,7 @@ Future<Dio> authDio(context) async {
         // 다시 인증 오류가 발생했을 경우: RefreshToken의 만료
         if (error.response?.statusCode == 401) {
 
-          // 기기의 자동 로그인 정보 삭제
+          // 기기의 자동 로그인 정보 삭제 후
           await storage.deleteAll();
 
           //로그인 스크린으로 이동
