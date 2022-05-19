@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:runnin_us/api/create_waiting_room_api.dart';
 import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/const/dummy.dart';
 import '../../provider/enter_check.dart';
@@ -25,8 +26,8 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
   String selectedDate = '';
   String selectedStartTime = '';
   String selectedEndTime = '';
-  String selectedLevel = '';
-  String maxMemberCount = '';
+  int selectedLevel = 0;
+  int maxMemberCount = 0;
   int selectedButtonIndex = 0;
   int selectedMaxNumberIndex = 0;
   int today = 200;
@@ -343,7 +344,7 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
                                     onPressed: () {
                                       setState(() {
                                         selectedButtonIndex = e;
-                                        selectedLevel = e.toString();
+                                        selectedLevel = e;
                                       });
                                     },
                                     child: Text('Lv $e'),
@@ -369,7 +370,7 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
                                     onPressed: () {
                                       setState(() {
                                         selectedButtonIndex = e;
-                                        selectedLevel = e.toString();
+                                        selectedLevel = e;
                                       });
                                     },
                                     child: Text('Lv $e'),
@@ -438,7 +439,7 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
                                     onPressed: () {
                                       setState(() {
                                         selectedMaxNumberIndex = e;
-                                        maxMemberCount = e.toString();
+                                        maxMemberCount = e;
                                       });
                                     },
                                     child: Text('정원 $e'),
@@ -468,7 +469,7 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
                 child: Text('취소'),
               ),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async{
                   if (selectedEndTime == '' ||
                       selectedStartTime == '' ||
                       selectedDate == '') {
@@ -476,26 +477,39 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
                   } else if (selectedLevel == '' || maxMemberCount == '') {
                     showToast('사유 : 생성 옵션을 선택해 주세요.');
                   } else {
-                    // print(selectedLatLng.latitude);
-                    // print(selectedLatLng.longitude);
-                    // print(selectedDate.split(' ')[0]);
-                    // print(selectedStartTime);
-                    // print(selectedEndTime);
-                    // print(selectedLevel);
-                    // print(maxMemberCount);
-                    myEnteredRoom['roomName'] =roomName;
-                    myEnteredRoom['host'] = myPageList[0]['name'];
-                    myEnteredRoom['latitude'] =
-                        selectedLatLng.latitude.toString();
-                    myEnteredRoom['longitude'] =
-                        selectedLatLng.longitude.toString();
-                    myEnteredRoom['startTime'] = selectedStartTime;
-                    myEnteredRoom['endTime'] = selectedEndTime;
-                    myEnteredRoom['level'] = selectedLevel;
-                    myEnteredRoom['maxMember'] = maxMemberCount;
-                    myEnteredRoom['runningLength'] =
-                        runningLength.toString().split('.')[0];
-                    _enterCheck.CreateRoom();
+                    bool? isCreated=await CreateWaitingRoomApi(
+                        roomName,
+                        1,
+                        selectedLatLng.latitude,
+                        selectedLatLng.longitude,
+                        maxMemberCount,
+                        runningLength.round(),
+                        selectedDate,
+                        selectedStartTime,
+                        selectedEndTime,
+                        selectedLevel);
+                    print(isCreated);
+
+                    if(isCreated==true){
+                      myEnteredRoom['roomName'] = roomName;
+                      myEnteredRoom['host'] = myPageList[0]['name'];
+                      myEnteredRoom['latitude'] =
+                          selectedLatLng.latitude.toString();
+                      myEnteredRoom['longitude'] =
+                          selectedLatLng.longitude.toString();
+                      myEnteredRoom['startTime'] = selectedStartTime;
+                      myEnteredRoom['endTime'] = selectedEndTime;
+                      myEnteredRoom['level'] = selectedLevel.toString();
+                      myEnteredRoom['maxMember'] = maxMemberCount.toString();
+                      myEnteredRoom['runningLength'] =
+                      runningLength.toString().split('.')[0];
+
+                      _enterCheck.CreateRoom();
+                    }else{
+                      print('생성실패');
+
+                    }
+
                   }
                 },
                 style: ElevatedButton.styleFrom(

@@ -110,7 +110,7 @@ Map myEnteredRoom = {
   'endTime': '',
   'level': '',
   'mamMember': '',
-  'member': ['전민종', '이준희', '김효재', '정민혁'],
+  'member': [],
 };
 
 Map resultExercise = {

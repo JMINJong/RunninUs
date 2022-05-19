@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:latlong2/latlong.dart' as d;
 import 'package:provider/provider.dart';
+import 'package:runnin_us/api/enter_waiting_room_api.dart';
+import 'package:runnin_us/api/get_waiting_room_api.dart';
 import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/const/dummy.dart';
 import 'package:runnin_us/provider/enter_check.dart';
 import 'package:runnin_us/screen/exercise/exercise_authentication.dart';
 
+import '../../const/data_dart.dart';
 import '../main/get_user_info.dart';
 
 const TextStyle ts = TextStyle(
@@ -27,6 +29,12 @@ class WaitingRoomScreen extends StatefulWidget {
 
 class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
   late EnterCheck _enterCheck;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     _enterCheck = Provider.of<EnterCheck>(context);
@@ -75,7 +83,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
         Expanded(
           flex: 7,
           child: FutureBuilder(
-              future: Geolocator.getCurrentPosition(),
+              future: GetWaitingRoomAPI(),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 if (snapshot.hasData == false) {
                   return Center(
@@ -83,19 +91,19 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                   );
                 }
                 LatLng nowLatLng =
-                LatLng(snapshot.data.latitude, snapshot.data.longitude);
+                    LatLng(snapshot.data.latitude, snapshot.data.longitude);
 
                 print(nowLatLng);
                 return RefreshIndicator(
                   onRefresh: () {
                     setState(() {});
-                    return Geolocator.getCurrentPosition();
+                    return GetWaitingRoomAPI();
                   },
                   child: ListView.separated(
                       itemBuilder: (
-                          context,
-                          index,
-                          ) {
+                        context,
+                        index,
+                      ) {
                         return renderWaitingRoom(
                           index,
                           nowLatLng,
@@ -115,7 +123,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                           child: Text(''),
                         );
                       },
-                      itemCount: waitingRoom.length),
+                      itemCount: waitingRoomList.length),
                 );
               }),
         ),
@@ -124,14 +132,14 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
   }
 
   renderWaitingRoom(
-      int index,
-      LatLng data,
-      ) {
-    final LatLng latlng = LatLng(double.parse(waitingRoom[index]['latitude']),
-        double.parse(waitingRoom[index]['longitude']));
+    int index,
+    LatLng data,
+  ) {
+    final LatLng latlng = LatLng(waitingRoomList[index]['POINT']['y'],
+        waitingRoomList[index]['POINT']['x']);
     final CameraPosition cp = CameraPosition(target: latlng, zoom: 17);
     final Marker marker =
-    Marker(markerId: MarkerId('marker$index'), position: latlng);
+        Marker(markerId: MarkerId('marker$index'), position: latlng);
     final double distance = d.Distance().as(
         d.LengthUnit.Kilometer,
         d.LatLng(latlng.latitude, latlng.longitude),
@@ -139,13 +147,13 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
     bool levelTooHigh = false;
     bool isRoomFull = false;
 
-    if (int.parse(waitingRoom[index]['level']) >
+    if (int.parse(waitingRoomList[index]['LEVEL']) >
         int.parse(myPageList[0]['level'])) {
       levelTooHigh = true;
     }
 
-    if (waitingRoom[index]['member'].length + 1 ==
-        int.parse(waitingRoom[index]['maxMember'])) {
+    if (waitingRoomList[index]['MAX_NUM'] ==
+        int.parse(waitingRoomList[index]['NOW_NUM'])) {
       isRoomFull = true;
     }
 
@@ -156,103 +164,109 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
         //인덱스 값 받아옴
         //받아온 인덱스로 대기실 구성
         //출력
-        if (waitingRoom[index]['member'].length >=
-            int.parse(waitingRoom[index]['maxMember']) - 1) {
-          showDialog(
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                title: Text('입장 실패'),
-                content: Text('사유 : 정원이 초과되었습니다.'),
-                actions: [
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(primary: PINK_COLOR),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('확인'))
-                ],
-              );
-            },
-          );
-        } else if (int.parse(waitingRoom[index]['level']) >
-            int.parse(myPageList[0]['level'])) {
-          showDialog(
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                title: Text('입장 실패'),
-                content: Text('사유 : 운동 레벨이 너무 높습니다.'),
-                actions: [
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(primary: PINK_COLOR),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('확인'))
-                ],
-              );
-            },
-          );
-        } else {
-          print('입장');
-          showDialog(
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                title: Text('대기실 입장'),
-                content: Text('입장하시겠습니까?'),
-                actions: [
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(primary: PINK_COLOR),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('취소')),
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(primary: MINT_COLOR),
-                      onPressed: () {
-                        //waitingRoom[index]['member'].add(myPageList[0]['name']);
-                        myEnteredRoom['roomName'] =
-                        waitingRoom[index]['roomName'];
-                        myEnteredRoom['host'] = waitingRoom[index]['host'];
-                        myEnteredRoom['latitude'] =
-                        waitingRoom[index]['latitude'];
-                        myEnteredRoom['longitude'] =
-                        waitingRoom[index]['longitude'];
-                        myEnteredRoom['runningLength'] =
-                        waitingRoom[index]['runningLength'];
-                        myEnteredRoom['startTime'] =
-                        waitingRoom[index]['startTime'];
-                        myEnteredRoom['endTime'] =
-                        waitingRoom[index]['endTime'];
-                        myEnteredRoom['level'] = waitingRoom[index]['level'];
+        // if (waitingRoom[index]['member'].length >=
+        //     int.parse(waitingRoom[index]['maxMember']) - 1) {
+        //   showDialog(
+        //     context: context,
+        //     builder: (_) {
+        //       return AlertDialog(
+        //         shape: RoundedRectangleBorder(
+        //           borderRadius: BorderRadius.circular(10.0),
+        //         ),
+        //         title: Text('입장 실패'),
+        //         content: Text('사유 : 정원이 초과되었습니다.'),
+        //         actions: [
+        //           ElevatedButton(
+        //               style: ElevatedButton.styleFrom(primary: PINK_COLOR),
+        //               onPressed: () {
+        //                 Navigator.of(context).pop();
+        //               },
+        //               child: Text('확인'))
+        //         ],
+        //       );
+        //     },
+        //   );
+        // } else if (int.parse(waitingRoom[index]['level']) >
+        //     int.parse(myPageList[0]['level'])) {
+        //   showDialog(
+        //     context: context,
+        //     builder: (_) {
+        //       return AlertDialog(
+        //         shape: RoundedRectangleBorder(
+        //           borderRadius: BorderRadius.circular(10.0),
+        //         ),
+        //         title: Text('입장 실패'),
+        //         content: Text('사유 : 운동 레벨이 너무 높습니다.'),
+        //         actions: [
+        //           ElevatedButton(
+        //               style: ElevatedButton.styleFrom(primary: PINK_COLOR),
+        //               onPressed: () {
+        //                 Navigator.of(context).pop();
+        //               },
+        //               child: Text('확인'))
+        //         ],
+        //       );
+        //     },
+        //   );
+        // } else {
+        print('입장');
+        showDialog(
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              title: Text('대기실 입장'),
+              content: Text('입장하시겠습니까?'),
+              actions: [
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(primary: PINK_COLOR),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('취소')),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(primary: MINT_COLOR),
+                    onPressed: () async {
+                      print(int.parse(waitingRoomList[index]['UID']));
+                      bool? isEnter = await EnterWaitingRoomApi(
+                          int.parse(waitingRoomList[index]['UID']));
 
-                        waitingRoom[index]['member'].add(myPageList[0]['name']);
-                        myEnteredRoom['member'] = [
-                          ...waitingRoom[index]['member']
-                        ];
-                        myEnteredRoom['maxMember'] =
-                        waitingRoom[index]['maxMember'];
-
+                      if (isEnter == true) {
                         _enterCheck.Enter();
                         Navigator.of(context).pop();
-                      },
-                      child: Text('확인'))
-                ],
-              );
-            },
-          );
-        }
+                      } else {
+                        Navigator.of(context).pop();
+                        showDialog(
+                          context: context,
+                          builder: (_) {
+                            return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              title: Text('입장 실패'),
+                              content: Text('사유 : 정원이 가득 찼습니다.'),
+                              actions: [
+                                ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        primary: PINK_COLOR),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('확인'))
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    },
+                    child: Text('확인'))
+              ],
+            );
+          },
+        );
+        // }
       },
       child: Column(
         children: [
@@ -264,7 +278,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
               ),
             ),
             child: Text(
-              '${waitingRoom[index]['roomName']}',
+              '${waitingRoomList[index]['NAME']}',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
             ),
@@ -306,21 +320,21 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                       Center(
                         child: levelTooHigh
                             ? Text(
-                          '운동레벨 : ${waitingRoom[index]['level']}',
-                          style: ts.copyWith(color: Colors.red),
-                        )
+                                '운동레벨 : ${waitingRoomList[index]['LEVEL']}',
+                                style: ts.copyWith(color: Colors.red),
+                              )
                             : Text(
-                          '운동레벨 : ${waitingRoom[index]['level']}',
-                          style: ts,
-                        ),
+                                '운동레벨 : ${waitingRoomList[index]['LEVEL']}',
+                                style: ts,
+                              ),
                       ),
                       Text(
-                        '운동 시간 : ${waitingRoom[index]['startTime']}~ ${waitingRoom[index]['endTime']}',
+                        '운동 시간 : ${waitingRoomList[index]['EX_START_TIME'].split('T')[1].split('.')[0]}~ ${waitingRoomList[index]['EX_END_TIME'].split('T')[1].split('.')[0]}',
                         style: ts.copyWith(fontSize: 16),
                       ),
                       Center(
                         child: Text(
-                          '운동 거리 : ${waitingRoom[index]['runningLength']} km',
+                          '운동 거리 : ${waitingRoomList[index]['EX_DISTANCE']} km',
                           style: ts.copyWith(fontSize: 16),
                         ),
                       ),
@@ -335,18 +349,18 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                         Center(
                             child: isRoomFull
                                 ? Text(
-                              '${waitingRoom[index]['member'].length + 1} / ${waitingRoom[index]['maxMember']}',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 20,
-                                  color: Colors.red),
-                            )
+                                    '${waitingRoomList[index]['MAX_NUM']} / ${waitingRoomList[index]['NOW_NUM']}',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 20,
+                                        color: Colors.red),
+                                  )
                                 : Text(
-                              '${waitingRoom[index]['member'].length + 1} / ${waitingRoom[index]['maxMember']}',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 20),
-                            )),
+                                    '${waitingRoomList[index]['MAX_NUM']} / ${waitingRoomList[index]['NOW_NUM']}',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 20),
+                                  )),
                         Text('$distance km',
                             style: TextStyle(
                                 fontWeight: FontWeight.w500, fontSize: 16))
