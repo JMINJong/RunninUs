@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               children: [
                 MainScreen(),
-                WaitingRoomScreen(),
+                ReservedRoomScreen(),
                 MyPageScreen(),
                 StoreScreen(),
               ],
