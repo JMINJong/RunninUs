@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:runnin_us/provider/enter_check.dart';
 import 'package:runnin_us/screen/main/home_screen.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:flutter_web_auth/flutter_web_auth.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -48,7 +48,11 @@ class LoginScreen extends StatelessWidget {
                   icon: Image.asset('asset/img/kakao_login.png'),
                   iconSize: 400,
                   onPressed: () async {
-
+                    final result = await FlutterWebAuth.authenticate(
+                        url: 'http://runninus-api.befined.com:8000/v1/login/kakao',
+                        callbackUrlScheme: "효재햄ㅠㅠ"
+                    );
+                    print(result);
                   }
               ),
             ),

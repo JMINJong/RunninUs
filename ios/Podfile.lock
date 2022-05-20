@@ -17,7 +17,7 @@ PODS:
   - GoogleMaps/Base (4.1.0)
   - GoogleMaps/Maps (4.1.0):
     - GoogleMaps/Base
-  - kakao_flutter_sdk_common (1.1.0):
+  - kakao_flutter_sdk_common (1.1.1):
     - Flutter
   - package_info_plus (0.4.5):
     - Flutter
@@ -69,7 +69,7 @@ SPEC CHECKSUMS:
   geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
   google_maps_flutter: c59fc576c0d0c7f4dc4bd63832c862d22d5a7c6d
   GoogleMaps: 008e2c80e38605b56b560e8deb73d4194ff30bef
-  kakao_flutter_sdk_common: b077b7da99ade3d0ce5990d3f35e0a1dc50a24b2
+  kakao_flutter_sdk_common: 2e35ad2f0c691c76456720632fe5067c8352d1a9
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
