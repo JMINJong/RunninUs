@@ -1,6 +1,5 @@
 
-const baseUrl = 'http://runninus-api.befined.com';
-const port = '8000';
+const baseUrl = 'http://runninus-api.befined.com:8000';
 
 enum API {
   TEST,
