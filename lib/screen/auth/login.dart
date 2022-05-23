@@ -20,6 +20,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isEntered=false;
     return Scaffold(
         backgroundColor: Colors.white,
         body: Column(
@@ -35,7 +36,7 @@ class LoginScreen extends StatelessWidget {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                         builder: (_) => ChangeNotifierProvider(
-                              create: (_) => EnterCheck(),
+                              create: (_) => isEntered?NowEnterCheck():EnterCheck(),
                               child: HomeScreen(),
                             )),
                   );

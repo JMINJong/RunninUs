@@ -17,8 +17,8 @@ Future<Position> GetWaitingRoomAPI() async {
     var dio = await Dio().request(
       'http://runninus-api.befined.com:8000/v1/meet/search',
       data: {
-        "point_x": 37.3817369,
-        "point_y": 127.1210368,
+        "point_x": nowLatLng.latitude,
+        "point_y": nowLatLng.longitude,
       },
       options: Options(method: 'POST'),
     );

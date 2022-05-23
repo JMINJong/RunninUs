@@ -101,6 +101,7 @@ int myPoint = 3000;
 // };
 
 Map myEnteredRoom = {
+  'roomId':0,
   'roomName':'',
   'host': '',
   'latitude': '',
