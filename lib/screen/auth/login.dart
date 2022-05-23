@@ -36,7 +36,7 @@ class LoginScreen extends StatelessWidget {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                         builder: (_) => ChangeNotifierProvider(
-                              create: (_) => isEntered?NowEnterCheck():EnterCheck(),
+                              create: (_) => EnterCheck(),
                               child: HomeScreen(),
                             )),
                   );
