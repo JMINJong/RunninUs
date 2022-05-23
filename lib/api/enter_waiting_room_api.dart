@@ -9,7 +9,7 @@ Future<bool?> EnterWaitingRoomApi(int roomId) async {
       data: {"meet_id": roomId, "user_id": 15},
       options: Options(method: 'POST'),
     );
-
+    myEnteredRoom['roomId']=roomId;
     myEnteredRoom['roomName'] = dio.data['results'][0]['NAME'].toString();
     myEnteredRoom['host'] = dio.data['results'][0]['HOST'].toString();
     myEnteredRoom['latitude'] = dio.data['results'][0]['POINT']['y'].toString();
@@ -28,5 +28,6 @@ Future<bool?> EnterWaitingRoomApi(int roomId) async {
     return dio.data['isSuccess'];
   } catch (e) {
     print(e);
+    return false;
   }
 }

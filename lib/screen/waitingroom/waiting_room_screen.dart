@@ -302,6 +302,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                             return SizedBox(
                               height: MediaQuery.of(context).size.height / 2,
                               child: GoogleMap(
+                                myLocationButtonEnabled: false,
                                 initialCameraPosition: cp,
                                 markers: {marker},
                               ),
@@ -356,7 +357,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                                         color: Colors.red),
                                   )
                                 : Text(
-                                    '${waitingRoomList[index]['MAX_NUM']} / ${waitingRoomList[index]['NOW_NUM']}',
+                                    '${waitingRoomList[index]['NOW_NUM']} / ${waitingRoomList[index]['MAX_NUM']}',
                                     style: TextStyle(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 20),
