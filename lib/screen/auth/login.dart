@@ -50,9 +50,12 @@ class LoginScreen extends StatelessWidget {
                   onPressed: () async {
                     final result = await FlutterWebAuth.authenticate(
                         url: 'http://runninus-api.befined.com:8000/v1/login/kakao',
-                        callbackUrlScheme: "효재햄ㅠㅠ"
+                        callbackUrlScheme: "효재햄 여기서 뭐가 드가야하나용가리"
                     );
-                    print(result);
+                    print("콜백 결과 확인해보기 : {$result}");
+                    //쿼리 리턴값에서 uid만 추출해보기
+                    final uid = Uri.parse(result).queryParameters['uid'];
+                    print("받아온 코드 나와라 얍: {$uid}");
                   }
               ),
             ),
