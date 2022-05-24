@@ -6,7 +6,6 @@ import 'package:runnin_us/screen/main/main_screen.dart';
 import 'package:runnin_us/screen/main/my_page_screen.dart';
 import 'package:runnin_us/screen/main/reserved_room_screen.dart';
 import 'package:runnin_us/screen/main/store_screen.dart';
-import 'package:runnin_us/screen/waitingroom/waiting_room_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -37,32 +36,32 @@ class _HomeScreenState extends State<HomeScreen> {
     return WillPopScope(
       onWillPop: onWillPop,
       child: Scaffold(
-          appBar: AppBar(
-            title: Text('RunninUs'),
-            centerTitle: true,
-            automaticallyImplyLeading: false,
-            backgroundColor: mainColor,
+        appBar: AppBar(
+          title: Text('RunninUs'),
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          backgroundColor: mainColor,
+        ),
+        bottomNavigationBar: _bottomNavi(),
+        body: SafeArea(
+          child: PageView(
+            controller: pageController,
+            onPageChanged: (int index) {
+              setState(() {
+                currentindex = index;
+                if (index == 0) {
+                  print('데이터 받아오기');
+                }
+              });
+            },
+            children: [
+              MainScreen(),
+              ReservedRoomScreen(),
+              MyPageScreen(),
+              StoreScreen(),
+            ],
           ),
-          bottomNavigationBar: _bottomNavi(),
-          body: SafeArea(
-            child: PageView(
-              controller: pageController,
-              onPageChanged: (int index) {
-                setState(() {
-                  currentindex = index;
-                  if (index == 0) {
-                    print('데이터 받아오기');
-                  }
-                });
-              },
-              children: [
-                MainScreen(),
-                ReservedRoomScreen(),
-                MyPageScreen(),
-                StoreScreen(),
-              ],
-            ),
-          ),
+        ),
       ),
     );
   }
