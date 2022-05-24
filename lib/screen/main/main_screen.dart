@@ -12,9 +12,11 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<EnterCheck>(
       builder: (context, provider, child) {
-        return Provider.of<EnterCheck>(context).isEntered
+        return isEntered
             ? EnteredWaitingRoom()
-            : Provider.of<EnterCheck>(context).isCreatedRoom? CreateWaitingRoom():WaitingRoomScreen();
+            : Provider.of<EnterCheck>(context).isCreatedRoom
+                ? CreateWaitingRoom()
+                : WaitingRoomScreen();
       },
     );
   }

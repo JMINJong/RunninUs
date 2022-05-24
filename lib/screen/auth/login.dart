@@ -20,7 +20,6 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isEntered=false;
     return Scaffold(
         backgroundColor: Colors.white,
         body: Column(
