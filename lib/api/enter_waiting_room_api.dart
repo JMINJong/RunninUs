@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:runnin_us/const/dummy.dart';
+import 'api_generator.dart';
 
 Future<bool?> EnterWaitingRoomApi(int roomId) async {
 
   try {
     var dio = await Dio().request(
-      'http://runninus-api.befined.com:8000/v1/meet/join',
+      getApi(API.JOIN_MEETING),
       data: {"meet_id": roomId, "user_id": 15},
       options: Options(method: 'POST'),
     );

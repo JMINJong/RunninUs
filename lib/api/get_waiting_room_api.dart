@@ -3,19 +3,19 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:runnin_us/const/data_dart.dart';
 import 'package:runnin_us/const/dummy.dart';
+import 'api_generator.dart';
 
 Future<Position> GetWaitingRoomAPI() async {
   currentPosition = await Geolocator.getCurrentPosition();
   print(currentPosition);
 
-  LatLng nowLatLng =
-      LatLng(currentPosition!.latitude, currentPosition!.longitude);
+  LatLng nowLatLng = LatLng(currentPosition!.latitude, currentPosition!.longitude);
   print(nowLatLng.latitude);
   print(nowLatLng.longitude);
 
   try {
     var dio = await Dio().request(
-      'http://runninus-api.befined.com:8000/v1/meet/search',
+      getApi(API.SEARCH_MEETING),
       data: {
         "point_x": nowLatLng.latitude,
         "point_y": nowLatLng.longitude,
