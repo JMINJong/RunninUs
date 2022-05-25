@@ -14,10 +14,8 @@ enum API {
   LOGIN,
   LOGOUT,
 
-  UPDATE_TOKEN,
-
   GET_USER_INFO,
-
+  UPDATE_USER_INFO
 }
 
 Map<API, String> apiMap = {
@@ -33,9 +31,8 @@ Map<API, String> apiMap = {
   API.LOGIN: '/login/kakao',
   API.LOGOUT: '/logout',
 
-  API.UPDATE_TOKEN: '',
-
-  API.GET_USER_INFO: '/api/v1/users/me',
+  API.GET_USER_INFO: '/v1/user/inquire',
+  API.UPDATE_USER_INFO: 'v1/user/update'
 };
 
 String getApi(API apiType, {String? suffix}) {
