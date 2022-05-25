@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'api_generator.dart';
 
 Future<bool?> CreateWaitingRoomApi(
   String name,
@@ -23,7 +24,7 @@ Future<bool?> CreateWaitingRoomApi(
 
   try {
     var dio = await Dio().request(
-      'http://runninus-api.befined.com:8000/v1/meet/create',
+      getApi(API.CREATE_MEETING),
       data: {
         "name": name,
         "host": host,
