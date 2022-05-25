@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:runnin_us/const/dummy.dart';
 import 'api_generator.dart';
 
 Future<bool?> CreateWaitingRoomApi(
@@ -38,7 +39,9 @@ Future<bool?> CreateWaitingRoomApi(
       },
       options: Options(method: 'POST'),
     );
-
+    print(dio.data['UID']);
+    myEnteredRoom['roomId'] = dio.data['UID'];
+    print(myEnteredRoom['roomId']);
     return dio.data['isSuccess'];
   } catch (e) {
     print(e);

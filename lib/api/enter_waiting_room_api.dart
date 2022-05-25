@@ -7,7 +7,7 @@ Future<bool?> EnterWaitingRoomApi(int roomId) async {
   try {
     var dio = await Dio().request(
       getApi(API.JOIN_MEETING),
-      data: {"meet_id": roomId, "user_id": 15},
+      data: {"meet_id": roomId, "user_id": myPageList[0]['uid']},
       options: Options(method: 'POST'),
     );
     myEnteredRoom['roomId']=roomId;

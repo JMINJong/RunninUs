@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 bool isEntered = false;
+bool isHost = false;
+
 
 class EnterCheck extends ChangeNotifier {
 
   bool isCreatedRoom = false;
-  bool isHost = false;
 
   void Enter() {
     isEntered = true;

@@ -479,7 +479,7 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
                   } else {
                     bool? isCreated=await CreateWaitingRoomApi(
                         roomName,
-                        1,
+                        myPageList[0]['uid'],
                         selectedLatLng.latitude,
                         selectedLatLng.longitude,
                         maxMemberCount,
@@ -491,6 +491,7 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
                     print(isCreated);
 
                     if(isCreated==true){
+
                       myEnteredRoom['roomName'] = roomName;
                       myEnteredRoom['host'] = myPageList[0]['name'];
                       myEnteredRoom['latitude'] =
