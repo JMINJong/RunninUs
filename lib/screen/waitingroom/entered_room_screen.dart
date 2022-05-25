@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:runnin_us/api/exit_waiting_room_api.dart';
 import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/const/dummy.dart';
 import 'package:runnin_us/screen/exercise/on_runnin.dart';
@@ -18,6 +19,12 @@ class EnteredWaitingRoom extends StatefulWidget {
 
 class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
   late EnterCheck _enterCheck;
+
+  @override
+  void initState() {
+    print(isHost);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,10 +161,16 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
                           ElevatedButton(
                               style:
                                   ElevatedButton.styleFrom(primary: MINT_COLOR),
-                              onPressed: () {
-                                myEnteredRoom['member'].clear();
+                              onPressed: () async{
+                                bool? isExit=await ExitWaitingRoomApi();
 
-                                _enterCheck.Exit();
+                                if(isExit==true){
+                                  myEnteredRoom['member'].clear();
+                                  _enterCheck.Exit();
+                                }else{
+                                  print('퇴장에 실패했습니다.');
+                                }
+
                                 Navigator.of(context).pop();
                               },
                               child: Text('확인'))
@@ -170,7 +183,7 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: MINT_COLOR),
-                onPressed: _enterCheck.isHost
+                onPressed: isHost
                     ? () {
                         showDialog(
                           context: context,
