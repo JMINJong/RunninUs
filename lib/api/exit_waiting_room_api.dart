@@ -11,7 +11,7 @@ Future<bool?> ExitWaitingRoomApi() async {
       "${getApi(API.QUIT_MEETING)}",
       data: {
         "user_id": myPageList[0]['uid'],
-        "meet_id": int.parse(myEnteredRoom['roomId']),
+        "meet_id": myEnteredRoom['roomId'],
       },
       options: Options(method: 'POST'),
     );
