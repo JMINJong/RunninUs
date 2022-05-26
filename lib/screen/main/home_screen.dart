@@ -7,6 +7,8 @@ import 'package:runnin_us/screen/main/my_page_screen.dart';
 import 'package:runnin_us/screen/main/reserved_room_screen.dart';
 import 'package:runnin_us/screen/main/store_screen.dart';
 
+import '../../socket/socket_io.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -28,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Geolocator.isLocationServiceEnabled();
     Geolocator.checkPermission();
     Geolocator.requestPermission();
+
     super.initState();
   }
 

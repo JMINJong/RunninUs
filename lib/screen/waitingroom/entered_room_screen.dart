@@ -24,7 +24,7 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
   @override
   void initState() {
     print(isHost);
-    connectAndListen();
+
     super.initState();
   }
 
@@ -178,8 +178,6 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
                                 bool? isExit = await ExitWaitingRoomApi();
 
                                 if (isExit == true) {
-                                  streamSocket.dispose();
-                                  StreamSocket().dispose();
                                   myEnteredRoom['member'].clear();
                                   _enterCheck.Exit();
                                 } else {
@@ -235,8 +233,8 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
                                     style: ElevatedButton.styleFrom(
                                         primary: MINT_COLOR),
                                     onPressed: () {
-
-                                      _enterCheck.StartRoom();
+                                      // _enterCheck.StartRoom();
+                                      socketRoomStart();
                                       Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
                                               builder: (_) =>

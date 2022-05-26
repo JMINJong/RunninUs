@@ -4,9 +4,9 @@ import 'package:runnin_us/socket/socket_io.dart';
 import 'api_generator.dart';
 
 Future<bool?> ExitWaitingRoomApi() async {
-  // print(myEnteredRoom['roomId']);
-  // print(myPageList[0]['uid']);
-  // print(getApi(API.QUIT_MEETING));
+  print(myEnteredRoom['roomId']);
+  print(myPageList[0]['uid']);
+
   try {
     var dio = await Dio().request(
       "${getApi(API.QUIT_MEETING)}",
@@ -16,6 +16,8 @@ Future<bool?> ExitWaitingRoomApi() async {
       },
       options: Options(method: 'POST'),
     );
+
+    socketRoomExit();
 
     StreamSocket().dispose();
 

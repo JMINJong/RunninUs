@@ -6,6 +6,8 @@ import 'package:runnin_us/provider/enter_check.dart';
 import 'package:runnin_us/screen/main/home_screen.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 
+import '../../socket/socket_io.dart';
+
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -19,6 +21,7 @@ class LoginScreen extends StatelessWidget {
   //     print("사용자 정보 요청 실패 $e");
   //   }
   // }
+
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +37,7 @@ class LoginScreen extends StatelessWidget {
                 icon: Image.asset('asset/img/main.png'),
                 iconSize: 500,
                 onPressed: () async {
+                  connectAndListen();
                   int? code = await CheckUserInWaitingRoomApi();
                   if (code == 200) {
                     isEntered = true;

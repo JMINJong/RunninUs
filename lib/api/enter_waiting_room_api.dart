@@ -27,7 +27,7 @@ Future<bool?> EnterWaitingRoomApi(int roomId) async {
     myEnteredRoom['maxMember'] = dio.data['results'][0]['MAX_NUM'].toString();
     print(myEnteredRoom);
 
-    socketRoomEnter(myPageList[0]['uid'], roomId);
+    socketRoomEnter(myPageList[0]['uid'], roomId,false);
 
     return dio.data['isSuccess'];
   } catch (e) {

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:runnin_us/const/dummy.dart';
+import '../socket/socket_io.dart';
 import 'api_generator.dart';
 
 Future<bool?> CreateWaitingRoomApi(
@@ -42,6 +43,8 @@ Future<bool?> CreateWaitingRoomApi(
     print(dio.data['UID']);
     myEnteredRoom['roomId'] = int.parse(dio.data['UID']);
     print(myEnteredRoom['roomId']);
+
+    socketRoomEnter(host, int.parse(dio.data['UID']),false);
     return dio.data['isSuccess'];
   } catch (e) {
     print(e);
