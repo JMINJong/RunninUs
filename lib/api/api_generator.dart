@@ -32,7 +32,7 @@ Map<API, String> apiMap = {
   API.LOGOUT: '/logout',
 
   API.GET_USER_INFO: '/v1/user/inquire',
-  API.UPDATE_USER_INFO: 'v1/user/update'
+  API.UPDATE_USER_INFO: '/v1/user/update'
 };
 
 String getApi(API apiType, {String? suffix}) {
