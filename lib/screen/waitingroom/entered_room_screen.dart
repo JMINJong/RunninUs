@@ -6,6 +6,7 @@ import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/const/dummy.dart';
 import 'package:runnin_us/screen/exercise/on_runnin.dart';
 import 'package:runnin_us/provider/enter_check.dart';
+import 'package:runnin_us/socket/socket_io.dart';
 
 //대기실 내부 화면
 //방장 권한 확인
@@ -23,11 +24,13 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
   @override
   void initState() {
     print(isHost);
+    connectAndListen();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    StreamSocket streamSocket = StreamSocket();
     List members = myEnteredRoom['member'];
     // int memberCount = int.parse(myEnteredRoom['maxMember']);
     _enterCheck = Provider.of<EnterCheck>(context);
@@ -115,21 +118,31 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
                   SizedBox(
                     height: 16,
                   ),
-                  Column(
-                    children: members.map(
-                      (e) {
-                        return SizedBox(
-                          height: MediaQuery.of(context).size.height / 24,
-                          child: Center(
-                            child: Text(
-                              '참여자 : ${e['NICK']}',
-                              style: TextStyle(
-                                  fontSize: 20.0, fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        );
-                      },
-                    ).toList(),
+                  StreamBuilder(
+                    stream: streamSocket.getResponse,
+                    builder: (context, snapshot) {
+                      print('Stream!');
+
+                      print('Stream SnapShot : ${snapshot}');
+
+                      return Column(
+                        children: members.map(
+                          (e) {
+                            return SizedBox(
+                              height: MediaQuery.of(context).size.height / 24,
+                              child: Center(
+                                child: Text(
+                                  '참여자 : ${e['NICK']}',
+                                  style: TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            );
+                          },
+                        ).toList(),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -158,17 +171,18 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
                                 Navigator.of(context).pop();
                               },
                               child: Text('취소')),
-
                           ElevatedButton(
                               style:
                                   ElevatedButton.styleFrom(primary: MINT_COLOR),
-                              onPressed: () async{
-                                bool? isExit=await ExitWaitingRoomApi();
+                              onPressed: () async {
+                                bool? isExit = await ExitWaitingRoomApi();
 
-                                if(isExit==true){
+                                if (isExit == true) {
+                                  streamSocket.dispose();
+                                  StreamSocket().dispose();
                                   myEnteredRoom['member'].clear();
                                   _enterCheck.Exit();
-                                }else{
+                                } else {
                                   print('퇴장에 실패했습니다.');
                                 }
 
@@ -183,13 +197,19 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
                 child: Text('나가기'),
               ),
               ElevatedButton(
-                  style:
-                  ElevatedButton.styleFrom(primary: PINK_COLOR),
+                  style: ElevatedButton.styleFrom(primary: PINK_COLOR),
                   onPressed: () {
                     print(members);
-
+                    socketTest();
                   },
                   child: Text('test')),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(primary: PINK_COLOR),
+                  onPressed: () {
+                    streamSocket.dispose();
+                    StreamSocket().dispose();
+                  },
+                  child: Text('dispose')),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: MINT_COLOR),
                 onPressed: isHost
@@ -215,6 +235,7 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
                                     style: ElevatedButton.styleFrom(
                                         primary: MINT_COLOR),
                                     onPressed: () {
+
                                       _enterCheck.StartRoom();
                                       Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
@@ -235,5 +256,10 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

@@ -57,10 +57,8 @@ List waitingRoom = [
 //유저 개인정보
 //이름, 나이, 위치, 부여받은 등급, 매너점수, 마지막 등급 측정 기록, 현재 보유중 포인트
 List myPageList = [
-  { 
-
+  {
     'uid': 5,
-
     'name': '이준희',
     'age': '25',
     'location': '성남',
