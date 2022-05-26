@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:runnin_us/const/dummy.dart';
+import 'package:runnin_us/socket/socket_io.dart';
 import 'api_generator.dart';
 
 Future<bool?> EnterWaitingRoomApi(int roomId) async {
@@ -25,6 +26,8 @@ Future<bool?> EnterWaitingRoomApi(int roomId) async {
     myEnteredRoom['level'] = dio.data['results'][0]['LEVEL'].toString();
     myEnteredRoom['maxMember'] = dio.data['results'][0]['MAX_NUM'].toString();
     print(myEnteredRoom);
+
+    socketRoomEnter(myPageList[0]['uid'], roomId);
 
     return dio.data['isSuccess'];
   } catch (e) {
