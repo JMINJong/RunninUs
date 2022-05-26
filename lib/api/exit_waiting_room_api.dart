@@ -8,7 +8,7 @@ Future<bool?> ExitWaitingRoomApi() async {
   // print(getApi(API.QUIT_MEETING));
   try {
     var dio = await Dio().request(
-      "${getApi(API.QUIT_MEETING)}",
+      getApi(API.QUIT_MEETING),
       data: {
         "user_id": myPageList[0]['uid'],
         "meet_id": myEnteredRoom['roomId'],

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:runnin_us/api/check_user_in_waiting_room.dart';
+import 'package:runnin_us/api/get_user_info.dart';
+import 'package:runnin_us/api/update_user_info.dart';
 import 'package:runnin_us/const/dummy.dart';
 import 'package:runnin_us/provider/enter_check.dart';
 import 'package:runnin_us/screen/main/home_screen.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
+
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -60,14 +63,15 @@ class LoginScreen extends StatelessWidget {
                   icon: Image.asset('asset/img/kakao_login.png'),
                   iconSize: 400,
                   onPressed: () async {
-                    final result = await FlutterWebAuth.authenticate(
-                        url:
-                            'http://runninus-api.befined.com:8000/v1/login/kakao',
-                        callbackUrlScheme: "효재햄 여기서 뭐가 드가야하나용가리");
-                    print("콜백 결과 확인해보기 : {$result}");
-                    //쿼리 리턴값에서 uid만 추출해보기
-                    final uid = Uri.parse(result).queryParameters['uid'];
-                    print("받아온 코드 나와라 얍: {$uid}");
+                    updateUserInfoApi();
+                    // final result = await FlutterWebAuth.authenticate(
+                    //     url:
+                    //         'http://runninus-api.befined.com:8000/v1/login/kakao',
+                    //     callbackUrlScheme: "효재햄 여기서 뭐가 드가야하나용가리");
+                    // print("콜백 결과 확인해보기 : {$result}");
+                    // //쿼리 리턴값에서 uid만 추출해보기
+                    // final uid = Uri.parse(result).queryParameters['uid'];
+                    // print("받아온 코드 나와라 얍: {$uid}");
                   }),
             ),
           ],

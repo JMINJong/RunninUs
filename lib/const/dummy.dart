@@ -62,9 +62,10 @@ List myPageList = [
     'uid': 5,
 
     'name': '이준희',
-    'age': '25',
+    'age': 25,
     'location': '성남',
     'level': '4',
+    'sex' : 0, // 남자 0, 여자 1
     'score': '3.14',
     'recent': '3:15',
     'point': '90'
