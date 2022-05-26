@@ -10,6 +10,7 @@ import 'package:runnin_us/provider/enter_check.dart';
 import 'package:runnin_us/screen/exercise/exercise_authentication.dart';
 
 import '../../const/data_dart.dart';
+import '../../socket/socket_io.dart';
 import '../main/get_user_info.dart';
 
 const TextStyle ts = TextStyle(

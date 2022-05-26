@@ -22,39 +22,67 @@ void connectAndListen() {
   IO.Socket socket = IO.io('http://runninus-api.befined.com:8000',
       OptionBuilder().setTransports(['websocket']).build());
 
-  socket.onConnect((_) {
-    print('connect');
-    // socket.emit('msg', 'test');
-    // socket.emit('PING');
-  });
+  socket.onConnect(
+    (_) {
+      print('connect');
+      // socket.emit('msg', 'test');
+      // socket.emit('PING');
+    },
+  );
   // socket.emit('PING');
 
   //When an event recieved from server, data is added to the stream
   socket.on('event', (data) => StreamSocket().addResponse);
 
-  socket.on('PONG', (data) {
-    print('PONG');
-    StreamSocket().addResponse('pong');
+  socket.on(
+    'PONG',
+    (data) {
+      print('PONG');
+      StreamSocket().addResponse('pong');
+    },
+  );
+  socket.on(
+    'MEET_CONNECTED',
+    (data) {
+      //{meetId} 날아옴
+      print('MEET_CONNECTED');
+      print(data);
+    },
+  );
+
+  socket.on(
+    'USER_IN',
+    (data) {
+      //{userUid}날아옴
+      print('USER_IN');
+      print(data);
+      print(data['userUid']);
+      StreamSocket().addResponse(data['userUid']);
+    },
+  );
+
+  socket.on(
+    'MEET_DISCONNECTED',
+    (date) {
+      print('MEET_DISCONNECTED');
+    },
+  );
+
+  socket.on('RUNNING_START',(data){
+    print("RUNNING_START");
+    print(data);
+    print(data['status']);
+    StreamSocket().addResponse(data['status']);
   });
-  socket.on('MEET_CONNECTED', (data) {
-    //{meetId} 날아옴
-    print('MEET_CONNECTED');
+
+  socket.on('RUNNING_END', (data) {
+    print("RUNNING_END");
+    print(data);
+    print(data['status']);
+    StreamSocket().addResponse(data['status']);
   });
-
-
-  socket.on('USER_IN', (data) {
-    //{userUid}날아옴
-    print('USER_IN');
-
-    StreamSocket().addResponse(data);
-
-
-  });
-
 
   socket.onDisconnect((_) => print('disconnect'));
-
-
 }
 
 void socketTest() {
@@ -62,10 +90,31 @@ void socketTest() {
   socket.emit('PING');
 }
 
-void socketRoomEnter(int userUid, int meetId) {
+void socketRoomEnter(int userUid, int meetId,bool isRecover) {
   IO.Socket socket = IO.io('http://runninus-api.befined.com:8000');
+  print('MEET_IN');
+
   socket.emit('MEET_IN', {
     "userUid": userUid,
-    "meetId":meetId,
+    "meetId": meetId,
+    'isRecover':isRecover,
   });
+}
+
+void socketRoomExit(){
+  IO.Socket socket = IO.io('http://runninus-api.befined.com:8000');
+  print('MEET_OUT');
+  socket.emit('MEET_OUT');
+}
+
+void socketRoomStart(){
+  IO.Socket socket = IO.io('http://runninus-api.befined.com:8000');
+  print('MEET_START');
+  socket.emit('MEET_START');
+}
+
+void socketRoomEnd(){
+  IO.Socket socket = IO.io('http://runninus-api.befined.com:8000');
+  print('MEET_END');
+  socket.emit('MEET_END');
 }

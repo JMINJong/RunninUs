@@ -6,6 +6,7 @@ import 'package:latlong2/latlong.dart' as d;
 import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/const/dummy.dart';
 import 'package:runnin_us/screen/exercise/exercise_result.dart';
+import 'package:runnin_us/socket/socket_io.dart';
 
 //운동 중 화면
 
@@ -300,6 +301,7 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                                                                   primary:
                                                                       MINT_COLOR),
                                                           onPressed: () {
+                                                            socketRoomEnd();
                                                             resultExercise[
                                                                     'totalLength'] =
                                                                 totalLengthForSpeed
