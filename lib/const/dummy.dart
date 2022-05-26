@@ -5,11 +5,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 List waitingRoom = [
   {
-    'roomName':'어서오세요',
+    'roomName': '어서오세요',
     'host': 'jeon minjong',
     'latitude': '37.435288',
     'longitude': '127.1385',
-    'runningLength':5,
+    'runningLength': 5,
     'level': '4',
     'startTime': '17:30',
     'endTime': '18:30',
@@ -22,11 +22,11 @@ List waitingRoom = [
     ],
   },
   {
-    'roomName':'달려봅시다',
+    'roomName': '달려봅시다',
     'host': 'jeon minjong',
     'latitude': '37.435288',
     'longitude': '127.1385',
-    'runningLength':8,
+    'runningLength': 8,
     'level': '4',
     'startTime': '17:30',
     'endTime': '18:30',
@@ -39,11 +39,11 @@ List waitingRoom = [
     ],
   },
   {
-    'roomName':'초보자 환영',
+    'roomName': '초보자 환영',
     'host': 'jeon minjong',
     'latitude': '37.435288',
     'longitude': '127.1385',
-    'runningLength':15,
+    'runningLength': 15,
     'level': '9',
     'startTime': '17:30',
     'endTime': '18:30',
@@ -57,8 +57,10 @@ List waitingRoom = [
 //유저 개인정보
 //이름, 나이, 위치, 부여받은 등급, 매너점수, 마지막 등급 측정 기록, 현재 보유중 포인트
 List myPageList = [
-  {
+  { 
+
     'uid': 5,
+
     'name': '이준희',
     'age': '25',
     'location': '성남',
@@ -104,13 +106,13 @@ int myPoint = 3000;
 // };
 
 Map myEnteredRoom = {
-  'roomId':-1,
-  'roomName':'',
+  'roomId': -1,
+  'roomName': '',
   'host': '',
   'latitude': '',
   'longitude': '',
   'startTime': '',
-  'runningLength':'',
+  'runningLength': '',
   'endTime': '',
   'level': '',
   'mamMember': '',
@@ -134,5 +136,5 @@ Map exerciseAuthentication = {
   'totalLength': '',
   'totalTime': '',
   'averageSpeed': '',
-  'level':'',
+  'level': '',
 };

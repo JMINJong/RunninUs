@@ -59,7 +59,7 @@ class _MutualEvaluationState extends State<MutualEvaluation> {
                           return Column(
                             children: [
                               Text(
-                                '${x.value}',
+                                '${x.value['NICK']}',
                                 style: TextStyle(fontSize: 20),
                               ),
                               Padding(

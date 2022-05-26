@@ -122,7 +122,7 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
                           height: MediaQuery.of(context).size.height / 24,
                           child: Center(
                             child: Text(
-                              '참여자 : $e',
+                              '참여자 : ${e['NICK']}',
                               style: TextStyle(
                                   fontSize: 20.0, fontWeight: FontWeight.w500),
                             ),
@@ -158,6 +158,7 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
                                 Navigator.of(context).pop();
                               },
                               child: Text('취소')),
+
                           ElevatedButton(
                               style:
                                   ElevatedButton.styleFrom(primary: MINT_COLOR),
@@ -181,6 +182,14 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
                 },
                 child: Text('나가기'),
               ),
+              ElevatedButton(
+                  style:
+                  ElevatedButton.styleFrom(primary: PINK_COLOR),
+                  onPressed: () {
+                    print(members);
+
+                  },
+                  child: Text('test')),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: MINT_COLOR),
                 onPressed: isHost
