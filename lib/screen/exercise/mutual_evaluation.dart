@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:runnin_us/const/dummy.dart';
+import '../../api/exit_waiting_room_api.dart';
 import '../../const/color.dart';
 
 //상호평가 페이지
@@ -17,6 +18,11 @@ class _MutualEvaluationState extends State<MutualEvaluation> {
   List<double> evaluationPoint = [100, 100, 100, 100];
 
   int i = -1;
+  @override
+  void initState() {
+    ExitWaitingRoomApi();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +65,7 @@ class _MutualEvaluationState extends State<MutualEvaluation> {
                           return Column(
                             children: [
                               Text(
-                                '${x.value['NICK']}',
+                                '${x.value}',
                                 style: TextStyle(fontSize: 20),
                               ),
                               Padding(
@@ -115,6 +121,7 @@ class _MutualEvaluationState extends State<MutualEvaluation> {
                   style: ElevatedButton.styleFrom(primary: MINT_COLOR),
                   onPressed: () {
                     print(evaluationPoint);
+                    myEnteredRoom['member'].clear();
                     Navigator.of(context).pop();
                   },
                   child: Text('평가완료'),

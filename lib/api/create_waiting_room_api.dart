@@ -44,6 +44,7 @@ Future<bool?> CreateWaitingRoomApi(
     myEnteredRoom['roomId'] = int.parse(dio.data['UID']);
     print(myEnteredRoom['roomId']);
 
+
     socketRoomEnter(host, int.parse(dio.data['UID']),false);
     return dio.data['isSuccess'];
   } catch (e) {

@@ -6,6 +6,7 @@ import 'package:runnin_us/provider/enter_check.dart';
 import 'package:runnin_us/screen/main/home_screen.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 
+import '../../api/get_user_info.dart';
 import '../../socket/socket_io.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -38,13 +39,14 @@ class LoginScreen extends StatelessWidget {
                 iconSize: 500,
                 onPressed: () async {
                   connectAndListen();
+                  await getUserInfoApi(myPageList[0]['uid']);
                   int? code = await CheckUserInWaitingRoomApi();
                   if (code == 200) {
                     isEntered = true;
                     print(myEnteredRoom['host']);
                     print(myPageList[0]['uid']);
 
-                    if (myEnteredRoom['host'].toString() == myPageList[0]['uid'].toString()) {
+                    if (myEnteredRoom['host'].toString() == myPageList[0]['name'].toString()) {
                       isHost = true;
                     }
                   }

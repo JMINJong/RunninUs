@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:latlong2/latlong.dart' as d;
 import 'package:provider/provider.dart';
 import 'package:runnin_us/api/enter_waiting_room_api.dart';
+import 'package:runnin_us/api/get_user_info.dart';
 import 'package:runnin_us/api/get_waiting_room_api.dart';
 import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/const/dummy.dart';
@@ -73,6 +74,15 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                         .push(MaterialPageRoute(builder: (_) => GetUserInfo()));
                   },
                   child: Text('유저 정보 받아오기'),
+                  style: ElevatedButton.styleFrom(
+                    primary: MINT_COLOR,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    getUserInfoApi(myPageList[0]['uid']);
+                  },
+                  child: Text('유저 정보'),
                   style: ElevatedButton.styleFrom(
                     primary: MINT_COLOR,
                   ),

@@ -30,7 +30,7 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
 
   @override
   Widget build(BuildContext context) {
-    StreamSocket streamSocket = StreamSocket();
+    // StreamSocket streamSocket = StreamSocket();
     List members = myEnteredRoom['member'];
     // int memberCount = int.parse(myEnteredRoom['maxMember']);
     _enterCheck = Provider.of<EnterCheck>(context);
@@ -118,12 +118,24 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
                   SizedBox(
                     height: 16,
                   ),
-                  StreamBuilder(
+                  StreamBuilder<String>(
                     stream: streamSocket.getResponse,
                     builder: (context, snapshot) {
                       print('Stream!');
+                      print('Stream SnapShot : ${snapshot.data}');
 
-                      print('Stream SnapShot : ${snapshot}');
+                      if (snapshot.data == '-1') {
+                        Future.delayed(Duration(milliseconds: 1000))
+                            .then((value) {
+                          _enterCheck.StartRoom();
+
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => OnRunningScreen(),
+                            ),
+                          );
+                        });
+                      }
 
                       return Column(
                         children: members.map(
@@ -132,7 +144,7 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
                               height: MediaQuery.of(context).size.height / 24,
                               child: Center(
                                 child: Text(
-                                  '참여자 : ${e['NICK']}',
+                                  '참여자 : ${e}',
                                   style: TextStyle(
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.w500),
@@ -194,20 +206,20 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
                 },
                 child: Text('나가기'),
               ),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: PINK_COLOR),
-                  onPressed: () {
-                    print(members);
-                    socketTest();
-                  },
-                  child: Text('test')),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: PINK_COLOR),
-                  onPressed: () {
-                    streamSocket.dispose();
-                    StreamSocket().dispose();
-                  },
-                  child: Text('dispose')),
+              // ElevatedButton(
+              //     style: ElevatedButton.styleFrom(primary: PINK_COLOR),
+              //     onPressed: () {
+              //       print(members);
+              //       socketTest();
+              //     },
+              //     child: Text('test')),
+              // ElevatedButton(
+              //     style: ElevatedButton.styleFrom(primary: PINK_COLOR),
+              //     onPressed: () {
+              //       streamSocket.dispose();
+              //       StreamSocket().dispose();
+              //     },
+              //     child: Text('dispose')),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: MINT_COLOR),
                 onPressed: isHost
@@ -233,7 +245,7 @@ class _EnteredWaitingRoomState extends State<EnteredWaitingRoom> {
                                     style: ElevatedButton.styleFrom(
                                         primary: MINT_COLOR),
                                     onPressed: () {
-                                      // _enterCheck.StartRoom();
+                                      _enterCheck.StartRoom();
                                       socketRoomStart();
                                       Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
