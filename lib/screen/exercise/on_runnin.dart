@@ -8,10 +8,11 @@ import 'package:runnin_us/const/dummy.dart';
 import 'package:runnin_us/screen/exercise/exercise_result.dart';
 import 'package:runnin_us/socket/socket_io.dart';
 
+import '../../api/exit_waiting_room_api.dart';
+import '../../api/get_members_waiting_room_api.dart';
+import '../../provider/enter_check.dart';
+
 //운동 중 화면
-
-
-
 
 class OnRunningScreen extends StatefulWidget {
   const OnRunningScreen({Key? key}) : super(key: key);
@@ -56,7 +57,7 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                       child: CircularProgressIndicator(),
                     );
                   }
-                  currentPosition=snapshot.data;
+                  currentPosition = snapshot.data;
                   movePath.clear();
                   polyline.clear();
                   final startTime = DateTime.now();
@@ -77,7 +78,7 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                       // print(
                       //     '${endTime.hour.toString().padLeft(2, '0')}:${endTime.minute.toString().padLeft(2, '0')}');
                       if (myEnteredRoom['endTime'] ==
-                          '${endTime.hour.toString().padLeft(2, '0')}:${endTime.minute.toString().padLeft(2, '0')}') {
+                          '${endTime.hour.toString().padLeft(2, '0')}:${endTime.minute.toString().padLeft(2, '0')}:00') {
                         resultExercise['totalLength'] =
                             totalLengthForSpeed.toString();
                         resultExercise['totalTime'] =
@@ -86,6 +87,7 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                             nowSpeed.toStringAsFixed(1);
                         resultExercise['kcal'] =
                             (totalHour * 0.1225).toStringAsFixed(2);
+                        GetMembersWaitingRoom();
                         Fluttertoast.showToast(
                             msg: "운동 종료! 곧 결과 페이지로 이동합니다.",
                             toastLength: Toast.LENGTH_LONG,
@@ -179,189 +181,231 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
 
                       camera = true;
 
-                      return Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: GoogleMap(
-                                initialCameraPosition:
-                                    CameraPosition(target: laln, zoom: 17),
-                                markers: {
-                                  Marker(markerId: MarkerId('m'), position: laln)
+                      return StreamBuilder(
+                          stream: streamSocket2.getResponse,
+                          builder: (context, snapshot) {
+                            if (snapshot.data == '-1') {
+                              resultExercise['totalLength'] =
+                                  totalLengthForSpeed.toString();
+                              resultExercise['totalTime'] =
+                                  totalTime.toString().split('.')[0];
+                              resultExercise['averageSpeed'] =
+                                  nowSpeed.toStringAsFixed(1);
+                              resultExercise['kcal'] =
+                                  (totalHour * 0.1225).toStringAsFixed(2);
+                              GetMembersWaitingRoom();
+
+                              Future.delayed(Duration(milliseconds: 1000)).then(
+                                (value) {
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (_) => ExerciseResult(),
+                                    ),
+                                  );
                                 },
-                                onMapCreated: (controller) {
-                                  mapController = controller;
-                                },
-                                polylines: polyline,
-                              ),
-                            ),
-                            Expanded(
+                              );
+                            }
+
+                            return Padding(
+                              padding: const EdgeInsets.all(16.0),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  kilo
-                                      ? renderContainer(
-                                          '현재 달린 거리 :${kiloMeter} km ${totalLength.toString().split('.')[0]} m')
-                                      : renderContainer(
-                                          '현재 달린 거리 :${totalLength.toString().split('.')[0]} m'),
-                                  renderContainer(
-                                      '달린 시간 : ${totalTime.toString().split('.')[0]}'),
-                                  renderContainer(
-                                      '현재 속력 : ${nowSpeed.toStringAsFixed(1)} k/m'),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16.0),
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      width: MediaQuery.of(context).size.width,
-                                      height:
-                                          MediaQuery.of(context).size.height / 12,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: MINT_COLOR, width: 2),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (_) {
-                                                  return AlertDialog(
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0),
-                                                    ),
-                                                    title: Text('운동 취소'),
-                                                    content: Text('정말로 나가시겠습니까?'),
-                                                    actions: [
-                                                      ElevatedButton(
-                                                          style: ElevatedButton
-                                                              .styleFrom(
-                                                                  primary:
-                                                                      PINK_COLOR),
-                                                          onPressed: () {
-                                                            Navigator.of(context)
-                                                                .pop();
-                                                          },
-                                                          child: Text('취소')),
-                                                      ElevatedButton(
-                                                          style: ElevatedButton
-                                                              .styleFrom(
-                                                                  primary:
-                                                                      MINT_COLOR),
-                                                          onPressed: () {
-                                                            Navigator.of(context)
-                                                                .pop();
-                                                            Navigator.of(context)
-                                                                .pop();
-                                                          },
-                                                          child: Text('확인'))
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              primary: PINK_COLOR,
-                                              minimumSize: Size(75, 37),
-                                            ),
-                                            child: Text('운동 취소'),
-                                          ),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (_) {
-                                                  return AlertDialog(
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0),
-                                                    ),
-                                                    title: Text('운동 종료'),
-                                                    content:
-                                                        Text('정말로 종료하시겠습니까?'),
-                                                    actions: [
-                                                      ElevatedButton(
-                                                          style: ElevatedButton
-                                                              .styleFrom(
-                                                                  primary:
-                                                                      PINK_COLOR),
-                                                          onPressed: () {
-                                                            Navigator.of(context)
-                                                                .pop();
-                                                          },
-                                                          child: Text('취소')),
-                                                      ElevatedButton(
-                                                          style: ElevatedButton
-                                                              .styleFrom(
-                                                                  primary:
-                                                                      MINT_COLOR),
-                                                          onPressed: () {
-                                                            socketRoomEnd();
-                                                            resultExercise[
-                                                                    'totalLength'] =
-                                                                totalLengthForSpeed
-                                                                    .toString();
-                                                            resultExercise[
-                                                                    'totalTime'] =
-                                                                totalTime
-                                                                    .toString()
-                                                                    .split(
-                                                                        '.')[0];
-                                                            resultExercise[
-                                                                    'averageSpeed'] =
-                                                                nowSpeed
-                                                                    .toStringAsFixed(
-                                                                        1);
-                                                            resultExercise[
-                                                                    'kcal'] =
-                                                                (totalHour *
-                                                                        0.1225)
-                                                                    .toStringAsFixed(
-                                                                        2);
-                                                            Navigator.of(context)
-                                                                .pop();
-                                                            Navigator.of(context)
-                                                                .pushReplacement(
-                                                              MaterialPageRoute(
-                                                                builder: (_) =>
-                                                                    ExerciseResult(),
-                                                              ),
-                                                            );
-                                                          },
-                                                          child: Text('확인'))
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              primary: MINT_COLOR,
-                                            ),
-                                            child: Text('운동 종료'),
-                                          ),
-                                        ],
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                      ),
+                                  Expanded(
+                                    child: GoogleMap(
+                                      initialCameraPosition: CameraPosition(
+                                          target: laln, zoom: 17),
+                                      markers: {
+                                        Marker(
+                                            markerId: MarkerId('m'),
+                                            position: laln)
+                                      },
+                                      onMapCreated: (controller) {
+                                        mapController = controller;
+                                      },
+                                      polylines: polyline,
                                     ),
                                   ),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        kilo
+                                            ? renderContainer(
+                                                '현재 달린 거리 :${kiloMeter} km ${totalLength.toString().split('.')[0]} m')
+                                            : renderContainer(
+                                                '현재 달린 거리 :${totalLength.toString().split('.')[0]} m'),
+                                        renderContainer(
+                                            '달린 시간 : ${totalTime.toString().split('.')[0]}'),
+                                        renderContainer(
+                                            '현재 속력 : ${nowSpeed.toStringAsFixed(1)} k/m'),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16.0),
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                12,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: MINT_COLOR, width: 2),
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (_) {
+                                                        return AlertDialog(
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10.0),
+                                                          ),
+                                                          title: Text('운동 취소'),
+                                                          content: Text(
+                                                              '정말로 나가시겠습니까?'),
+                                                          actions: [
+                                                            ElevatedButton(
+                                                                style: ElevatedButton
+                                                                    .styleFrom(
+                                                                        primary:
+                                                                            PINK_COLOR),
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                                child:
+                                                                    Text('취소')),
+                                                            ElevatedButton(
+                                                                style: ElevatedButton
+                                                                    .styleFrom(
+                                                                        primary:
+                                                                            MINT_COLOR),
+                                                                onPressed: () {
+                                                                  ExitWaitingRoomApi();
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                                child:
+                                                                    Text('확인'))
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    primary: PINK_COLOR,
+                                                    minimumSize: Size(75, 37),
+                                                  ),
+                                                  child: Text('운동 취소'),
+                                                ),
+                                                ElevatedButton(
+                                                  onPressed: isHost
+                                                      ? () {
+                                                          showDialog(
+                                                            context: context,
+                                                            builder: (_) {
+                                                              return AlertDialog(
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10.0),
+                                                                ),
+                                                                title: Text(
+                                                                    '운동 종료'),
+                                                                content: Text(
+                                                                    '정말로 종료하시겠습니까?'),
+                                                                actions: [
+                                                                  ElevatedButton(
+                                                                      style: ElevatedButton.styleFrom(
+                                                                          primary:
+                                                                              PINK_COLOR),
+                                                                      onPressed:
+                                                                          () {
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                      },
+                                                                      child: Text(
+                                                                          '취소')),
+                                                                  ElevatedButton(
+                                                                      style: ElevatedButton.styleFrom(
+                                                                          primary:
+                                                                              MINT_COLOR),
+                                                                      onPressed:
+                                                                          () async {
+                                                                        await GetMembersWaitingRoom();
+                                                                        socketRoomEnd();
+                                                                        resultExercise['totalLength'] =
+                                                                            totalLengthForSpeed.toString();
+                                                                        resultExercise['totalTime'] = totalTime
+                                                                            .toString()
+                                                                            .split('.')[0];
+                                                                        resultExercise['averageSpeed'] =
+                                                                            nowSpeed.toStringAsFixed(1);
+                                                                        resultExercise[
+                                                                            'kcal'] = (totalHour *
+                                                                                0.1225)
+                                                                            .toStringAsFixed(2);
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                        Navigator.of(context)
+                                                                            .pushReplacement(
+                                                                          MaterialPageRoute(
+                                                                            builder: (_) =>
+                                                                                ExerciseResult(),
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                      child: Text(
+                                                                          '확인'))
+                                                                ],
+                                                              );
+                                                            },
+                                                          );
+                                                        }
+                                                      : null,
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    primary: MINT_COLOR,
+                                                  ),
+                                                  child: Text('운동 종료'),
+                                                ),
+                                              ],
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                            ),
+                                          ),
+                                        ),
 
-                                  // Countup(
-                                  //   begin: count[timeCountEnd],
-                                  //   end: count[timeCountStart],
-                                  //   duration: Duration(seconds: 2),
-                                  // ),
+                                        // Countup(
+                                        //   begin: count[timeCountEnd],
+                                        //   end: count[timeCountStart],
+                                        //   duration: Duration(seconds: 2),
+                                        // ),
+                                      ],
+                                    ),
+                                  )
                                 ],
                               ),
-                            )
-                          ],
-                        ),
-                      );
+                            );
+                          });
                     },
                   );
                 },

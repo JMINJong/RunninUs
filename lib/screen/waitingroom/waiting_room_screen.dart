@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:latlong2/latlong.dart' as d;
 import 'package:provider/provider.dart';
 import 'package:runnin_us/api/enter_waiting_room_api.dart';
+import 'package:runnin_us/api/get_user_info.dart';
 import 'package:runnin_us/api/get_waiting_room_api.dart';
 import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/const/dummy.dart';
@@ -57,26 +58,35 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                     primary: MINT_COLOR,
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => ExerciseAuthentication()));
-                  },
-                  child: Text('운동 검증'),
-                  style: ElevatedButton.styleFrom(
-                    primary: MINT_COLOR,
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (_) => GetUserInfo()));
-                  },
-                  child: Text('유저 정보 받아오기'),
-                  style: ElevatedButton.styleFrom(
-                    primary: MINT_COLOR,
-                  ),
-                )
+                // ElevatedButton(
+                //   onPressed: () {
+                //     Navigator.of(context).push(MaterialPageRoute(
+                //         builder: (_) => ExerciseAuthentication()));
+                //   },
+                //   child: Text('운동 검증'),
+                //   style: ElevatedButton.styleFrom(
+                //     primary: MINT_COLOR,
+                //   ),
+                // ),
+                // ElevatedButton(
+                //   onPressed: () {
+                //     Navigator.of(context)
+                //         .push(MaterialPageRoute(builder: (_) => GetUserInfo()));
+                //   },
+                //   child: Text('유저 정보 받아오기'),
+                //   style: ElevatedButton.styleFrom(
+                //     primary: MINT_COLOR,
+                //   ),
+                // ),
+                // ElevatedButton(
+                //   onPressed: () {
+                //     getUserInfoApi(myPageList[0]['uid']);
+                //   },
+                //   child: Text('유저 정보'),
+                //   style: ElevatedButton.styleFrom(
+                //     primary: MINT_COLOR,
+                //   ),
+                // )
               ],
             ),
           ),
@@ -331,7 +341,10 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                               ),
                       ),
                       Text(
-                        '운동 시간 : ${waitingRoomList[index]['EX_START_TIME'].split('T')[1].split('.')[0]}~ ${waitingRoomList[index]['EX_END_TIME'].split('T')[1].split('.')[0]}',
+                        '운동 시간 : ${(int.parse(waitingRoomList[index]['EX_START_TIME'].split('T')[1].split('.')[0].split(':')[0]) + 9) % 24}'
+                            ':${waitingRoomList[index]['EX_START_TIME'].split('T')[1].split('.')[0].split(':')[1]}'
+                            '~ ${(int.parse(waitingRoomList[index]['EX_END_TIME'].split('T')[1].split('.')[0].split(':')[0]) + 9) % 24}'
+                            ':${waitingRoomList[index]['EX_END_TIME'].split('T')[1].split('.')[0].split(':')[1]}',
                         style: ts.copyWith(fontSize: 16),
                       ),
                       Center(

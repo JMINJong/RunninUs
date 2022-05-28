@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:runnin_us/const/dummy.dart';
+import '../../api/exit_waiting_room_api.dart';
 import '../../const/color.dart';
 
 //상호평가 페이지
@@ -16,7 +17,14 @@ class _MutualEvaluationState extends State<MutualEvaluation> {
 
   List<double> evaluationPoint = [100, 100, 100, 100];
 
+  List result = [];
+
   int i = -1;
+  @override
+  void initState() {
+    ExitWaitingRoomApi();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,56 +61,68 @@ class _MutualEvaluationState extends State<MutualEvaluation> {
                     //   border: Border.all(color: PINK_COLOR, width: 2),
                     // ),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: member.asMap().entries.map(
                         (x) {
-                          return Column(
-                            children: [
-                              Text(
-                                '${x.value['NICK']}',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 20.0),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      '0',
-                                      style: TextStyle(
-                                          color: PINK_COLOR,
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 20),
-                                    ),
-                                    Expanded(
-                                      child: Slider(
-                                        activeColor: PINK_COLOR,
-                                        inactiveColor: MINT_COLOR,
-                                        max: 200,
-                                        value: evaluationPoint[x.key],
-                                        onChanged: (double value) {
-                                          setState(
-                                            () {
-                                              evaluationPoint[x.key] =
-                                                  value.roundToDouble();
-                                            },
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    Text(
-                                      '200',
-                                      style: TextStyle(
-                                          color: MINT_COLOR,
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 20),
-                                    ),
-                                  ],
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                          if (int.parse(x.value['UID']) !=
+                              myPageList[0]['uid']) {
+                            return Column(
+                              children: [
+                                Text(
+                                  '${x.value['NICK']}',
+                                  style: TextStyle(fontSize: 20),
                                 ),
-                              ),
-                            ],
-                          );
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 20.0),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        '0',
+                                        style: TextStyle(
+                                            color: PINK_COLOR,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 20),
+                                      ),
+                                      Expanded(
+                                        child: Slider(
+                                          activeColor: PINK_COLOR,
+                                          inactiveColor: MINT_COLOR,
+                                          max: 200,
+                                          value: evaluationPoint[x.key],
+                                          onChanged: (double value) {
+                                            setState(
+                                              () {
+                                                evaluationPoint[x.key] =
+                                                    value.roundToDouble();
+                                              },
+                                            );
+                                          },
+                                          onChangeEnd: (value){
+                                            result.add({
+                                              'uid': x.value['UID'],
+                                              'manner_point':
+                                              value.roundToDouble()
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      Text(
+                                        '200',
+                                        style: TextStyle(
+                                            color: MINT_COLOR,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 20),
+                                      ),
+                                    ],
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                  ),
+                                ),
+                              ],
+                            );
+                          } else {
+                            return SizedBox();
+                          }
                         },
                       ).toList(),
                     ),
@@ -115,6 +135,8 @@ class _MutualEvaluationState extends State<MutualEvaluation> {
                   style: ElevatedButton.styleFrom(primary: MINT_COLOR),
                   onPressed: () {
                     print(evaluationPoint);
+                    print(result);
+                    myEnteredRoom['member'].clear();
                     Navigator.of(context).pop();
                   },
                   child: Text('평가완료'),

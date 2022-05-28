@@ -38,7 +38,6 @@ class EnterCheck extends ChangeNotifier {
   void StartRoom() {
     print('방 시작');
     isEntered = false;
-    isHost = false;
     notifyListeners();
   }
 

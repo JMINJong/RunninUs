@@ -1,19 +1,25 @@
 import 'dart:async';
+import 'package:runnin_us/api/get_user_nick.dart';
+import 'package:runnin_us/const/dummy.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:socket_io_client/socket_io_client.dart';
 
 // STEP1:  Stream setup
 class StreamSocket {
-  final _socketResponse = StreamController();
+  final _socketResponse = StreamController<String>.broadcast();
 
-  void Function(dynamic) get addResponse => _socketResponse.sink.add;
+  void Function(String) get addResponse => _socketResponse.sink.add;
 
-  Stream get getResponse => _socketResponse.stream;
+  Stream<String> get getResponse => _socketResponse.stream;
 
   void dispose() {
     _socketResponse.close();
   }
 }
+
+StreamSocket streamSocket = StreamSocket();
+StreamSocket streamSocket2 = StreamSocket();
+
 //ws://echo.websocket.org
 //http://runninus-api.befined.com:8000
 
@@ -38,26 +44,34 @@ void connectAndListen() {
     'PONG',
     (data) {
       print('PONG');
-      StreamSocket().addResponse('pong');
+
     },
   );
   socket.on(
     'MEET_CONNECTED',
     (data) {
       //{meetId} 날아옴
+
+
       print('MEET_CONNECTED');
       print(data);
+      print(myEnteredRoom['member']);
+      streamSocket.addResponse('1');
     },
   );
 
   socket.on(
     'USER_IN',
-    (data) {
+    (data) async{
+
+      String? name=await GetUserNick(data['userUid']);
       //{userUid}날아옴
       print('USER_IN');
       print(data);
-      print(data['userUid']);
-      StreamSocket().addResponse(data['userUid']);
+      // print(data['userUid']);
+      myEnteredRoom['member'].add(name);
+      streamSocket.addResponse('1');
+      print(myEnteredRoom['member']);
     },
   );
 
@@ -68,18 +82,18 @@ void connectAndListen() {
     },
   );
 
-  socket.on('RUNNING_START',(data){
+  socket.on('RUNNING_START', (data) {
     print("RUNNING_START");
     print(data);
     print(data['status']);
-    StreamSocket().addResponse(data['status']);
+    streamSocket.addResponse('${data['status']}');
   });
 
   socket.on('RUNNING_END', (data) {
     print("RUNNING_END");
     print(data);
+    streamSocket2.addResponse('${data['status']}');
     print(data['status']);
-    StreamSocket().addResponse(data['status']);
   });
 
   socket.onDisconnect((_) => print('disconnect'));
@@ -90,30 +104,32 @@ void socketTest() {
   socket.emit('PING');
 }
 
-void socketRoomEnter(int userUid, int meetId,bool isRecover) {
+void socketRoomEnter(int userUid, int meetId, bool isRecover) {
   IO.Socket socket = IO.io('http://runninus-api.befined.com:8000');
   print('MEET_IN');
+  // myEnteredRoom['member'].add(myPageList[0]['name']);
+
 
   socket.emit('MEET_IN', {
     "userUid": userUid,
     "meetId": meetId,
-    'isRecover':isRecover,
+    'isRecover': isRecover,
   });
 }
 
-void socketRoomExit(){
+void socketRoomExit() {
   IO.Socket socket = IO.io('http://runninus-api.befined.com:8000');
   print('MEET_OUT');
   socket.emit('MEET_OUT');
 }
 
-void socketRoomStart(){
+void socketRoomStart() {
   IO.Socket socket = IO.io('http://runninus-api.befined.com:8000');
   print('MEET_START');
   socket.emit('MEET_START');
 }
 
-void socketRoomEnd(){
+void socketRoomEnd() {
   IO.Socket socket = IO.io('http://runninus-api.befined.com:8000');
   print('MEET_END');
   socket.emit('MEET_END');

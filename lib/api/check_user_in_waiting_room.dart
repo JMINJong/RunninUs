@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:runnin_us/api/get_user_nick.dart';
 import '../const/dummy.dart';
 import '../socket/socket_io.dart';
 
@@ -10,9 +11,11 @@ Future<int?> CheckUserInWaitingRoomApi() async {
       options: Options(method: 'POST'),
     );
     if (dio.data['code'] == 200) {
+
+      String? name=await GetUserNick(int.parse(dio.data['results'][0]['HOST']));
       myEnteredRoom['roomId'] = int.parse(dio.data['results'][0]['UID']);
       myEnteredRoom['roomName'] = dio.data['results'][0]['NAME'].toString();
-      myEnteredRoom['host'] = int.parse(dio.data['results'][0]['HOST']);
+      myEnteredRoom['host'] = name;
       myEnteredRoom['latitude'] =
           dio.data['results'][0]['POINT']['y'].toString();
       myEnteredRoom['longitude'] =
@@ -29,7 +32,7 @@ Future<int?> CheckUserInWaitingRoomApi() async {
 
     socketRoomEnter(myPageList[0]['uid'],int.parse( dio.data['results'][0]['UID']), true);
 
-    print(myEnteredRoom);
+    // print(myEnteredRoom);
 
     return dio.data['code'];
   } catch (e) {
