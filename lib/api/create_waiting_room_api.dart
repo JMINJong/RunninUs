@@ -21,8 +21,8 @@ Future<bool?> CreateWaitingRoomApi(
       ':' +
       date.split('-')[2].split(' ')[0];
 
-  String exStart = exDate + ' ' + start_Time + ':00';
-  String exEnd = exDate + ' ' + end_Time + ':00';
+  String exStart = exDate + ' ' + start_Time;
+  String exEnd = exDate + ' ' + end_Time;
 
   try {
     var dio = await Dio().request(

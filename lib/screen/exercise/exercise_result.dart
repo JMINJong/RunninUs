@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:runnin_us/api/get_members_waiting_room_api.dart';
 import 'package:runnin_us/const/color.dart';
 import 'package:runnin_us/screen/exercise/mutual_evaluation.dart';
 import '../../const/dummy.dart';
@@ -59,7 +60,9 @@ class _ExerciseResultState extends State<ExerciseResult> {
                     ],
                   ),
                 ),
-                SizedBox(height: 16,),
+                SizedBox(
+                  height: 16,
+                ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height / 4,
                   child: GoogleMap(
@@ -68,7 +71,9 @@ class _ExerciseResultState extends State<ExerciseResult> {
                     polylines: polyline,
                   ),
                 ),
-                SizedBox(height: 16,),
+                SizedBox(
+                  height: 16,
+                ),
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
@@ -101,9 +106,11 @@ class _ExerciseResultState extends State<ExerciseResult> {
                     ),
                   ),
                 ),
-                SizedBox(height: 8,),
+                SizedBox(
+                  height: 8,
+                ),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (_) => MutualEvaluation(),

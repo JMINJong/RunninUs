@@ -6,9 +6,6 @@ import '../provider/enter_check.dart';
 import 'api_generator.dart';
 
 Future<bool?> EnterWaitingRoomApi(int roomId) async {
-
-
-
   try {
     var dio = await Dio().request(
       getApi(API.JOIN_MEETING),
@@ -16,8 +13,8 @@ Future<bool?> EnterWaitingRoomApi(int roomId) async {
       options: Options(method: 'POST'),
     );
 
-    String? name=await GetUserNick(int.parse(dio.data['results'][0]['HOST']));
-    myEnteredRoom['roomId']=roomId;
+    String? name = await GetUserNick(int.parse(dio.data['results'][0]['HOST']));
+    myEnteredRoom['roomId'] = roomId;
     myEnteredRoom['roomName'] = dio.data['results'][0]['NAME'].toString();
     myEnteredRoom['host'] = name;
     myEnteredRoom['latitude'] = dio.data['results'][0]['POINT']['y'].toString();
@@ -25,16 +22,17 @@ Future<bool?> EnterWaitingRoomApi(int roomId) async {
         dio.data['results'][0]['POINT']['x'].toString();
     myEnteredRoom['runningLength'] =
         dio.data['results'][0]['EX_DISTANCE'].toString();
+
     myEnteredRoom['startTime'] =
-        dio.data['results'][0]['EX_START_TIME'].split('.')[0].split('T')[1];
+        '${(int.parse(dio.data['results'][0]['EX_START_TIME'].split('.')[0].split('T')[1].split(':')[0]) + 9) % 24}:${dio.data['results'][0]['EX_START_TIME'].split('.')[0].split('T')[1].split(':')[1]}';
     myEnteredRoom['endTime'] =
-        dio.data['results'][0]['EX_END_TIME'].split('.')[0].split('T')[1];
+    '${(int.parse(dio.data['results'][0]['EX_END_TIME'].split('.')[0].split('T')[1].split(':')[0]) + 9) % 24}:${dio.data['results'][0]['EX_END_TIME'].split('.')[0].split('T')[1].split(':')[1]}';
     myEnteredRoom['level'] = dio.data['results'][0]['LEVEL'].toString();
     myEnteredRoom['maxMember'] = dio.data['results'][0]['MAX_NUM'].toString();
     print(myEnteredRoom);
 
-    socketRoomEnter(myPageList[0]['uid'], roomId,false);
-    isHost=false;
+    socketRoomEnter(myPageList[0]['uid'], roomId, false);
+    isHost = false;
 
     return dio.data['isSuccess'];
   } catch (e) {

@@ -8,6 +8,8 @@ import 'package:runnin_us/const/dummy.dart';
 import 'package:runnin_us/screen/exercise/exercise_result.dart';
 import 'package:runnin_us/socket/socket_io.dart';
 
+import '../../api/exit_waiting_room_api.dart';
+import '../../api/get_members_waiting_room_api.dart';
 import '../../provider/enter_check.dart';
 
 //운동 중 화면
@@ -76,7 +78,7 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                       // print(
                       //     '${endTime.hour.toString().padLeft(2, '0')}:${endTime.minute.toString().padLeft(2, '0')}');
                       if (myEnteredRoom['endTime'] ==
-                          '${endTime.hour.toString().padLeft(2, '0')}:${endTime.minute.toString().padLeft(2, '0')}') {
+                          '${endTime.hour.toString().padLeft(2, '0')}:${endTime.minute.toString().padLeft(2, '0')}:00') {
                         resultExercise['totalLength'] =
                             totalLengthForSpeed.toString();
                         resultExercise['totalTime'] =
@@ -85,6 +87,7 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                             nowSpeed.toStringAsFixed(1);
                         resultExercise['kcal'] =
                             (totalHour * 0.1225).toStringAsFixed(2);
+                        GetMembersWaitingRoom();
                         Fluttertoast.showToast(
                             msg: "운동 종료! 곧 결과 페이지로 이동합니다.",
                             toastLength: Toast.LENGTH_LONG,
@@ -190,6 +193,7 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                                   nowSpeed.toStringAsFixed(1);
                               resultExercise['kcal'] =
                                   (totalHour * 0.1225).toStringAsFixed(2);
+                              GetMembersWaitingRoom();
 
                               Future.delayed(Duration(milliseconds: 1000)).then(
                                 (value) {
@@ -254,53 +258,55 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                                             child: Row(
                                               children: [
                                                 ElevatedButton(
-                                                  onPressed:  () {
-                                                          showDialog(
-                                                            context: context,
-                                                            builder: (_) {
-                                                              return AlertDialog(
-                                                                shape:
-                                                                    RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              10.0),
-                                                                ),
-                                                                title: Text(
-                                                                    '운동 취소'),
-                                                                content: Text(
-                                                                    '정말로 나가시겠습니까?'),
-                                                                actions: [
-                                                                  ElevatedButton(
-                                                                      style: ElevatedButton.styleFrom(
-                                                                          primary:
-                                                                              PINK_COLOR),
-                                                                      onPressed:
-                                                                          () {
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                      },
-                                                                      child: Text(
-                                                                          '취소')),
-                                                                  ElevatedButton(
-                                                                      style: ElevatedButton.styleFrom(
-                                                                          primary:
-                                                                              MINT_COLOR),
-                                                                      onPressed:
-                                                                          () {
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                      },
-                                                                      child: Text(
-                                                                          '확인'))
-                                                                ],
-                                                              );
-                                                            },
-                                                          );
-                                                        }
-                                                      ,
+                                                  onPressed: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (_) {
+                                                        return AlertDialog(
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10.0),
+                                                          ),
+                                                          title: Text('운동 취소'),
+                                                          content: Text(
+                                                              '정말로 나가시겠습니까?'),
+                                                          actions: [
+                                                            ElevatedButton(
+                                                                style: ElevatedButton
+                                                                    .styleFrom(
+                                                                        primary:
+                                                                            PINK_COLOR),
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                                child:
+                                                                    Text('취소')),
+                                                            ElevatedButton(
+                                                                style: ElevatedButton
+                                                                    .styleFrom(
+                                                                        primary:
+                                                                            MINT_COLOR),
+                                                                onPressed: () {
+                                                                  ExitWaitingRoomApi();
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                                child:
+                                                                    Text('확인'))
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  },
                                                   style:
                                                       ElevatedButton.styleFrom(
                                                     primary: PINK_COLOR,
@@ -343,7 +349,8 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                                                                           primary:
                                                                               MINT_COLOR),
                                                                       onPressed:
-                                                                          () {
+                                                                          () async {
+                                                                        await GetMembersWaitingRoom();
                                                                         socketRoomEnd();
                                                                         resultExercise['totalLength'] =
                                                                             totalLengthForSpeed.toString();
