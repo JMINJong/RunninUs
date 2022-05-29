@@ -11,8 +11,8 @@ Future<int?> CheckUserInWaitingRoomApi() async {
       options: Options(method: 'POST'),
     );
     if (dio.data['code'] == 200) {
-
-      String? name=await GetUserNick(int.parse(dio.data['results'][0]['HOST']));
+      String? name =
+          await GetUserNick(int.parse(dio.data['results'][0]['HOST']));
       myEnteredRoom['roomId'] = int.parse(dio.data['results'][0]['UID']);
       myEnteredRoom['roomName'] = dio.data['results'][0]['NAME'].toString();
       myEnteredRoom['host'] = name;
@@ -28,11 +28,14 @@ Future<int?> CheckUserInWaitingRoomApi() async {
           dio.data['results'][0]['EX_END_TIME'].split('.')[0].split('T')[1];
       myEnteredRoom['level'] = dio.data['results'][0]['LEVEL'].toString();
       myEnteredRoom['maxMember'] = dio.data['results'][0]['MAX_NUM'].toString();
+      // dio.data['results'][0]['member'].map((e){
+      //
+      // });
+      socketRoomEnter(
+          myPageList[0]['uid'], int.parse(dio.data['results'][0]['UID']), true);
     }
-
-    socketRoomEnter(myPageList[0]['uid'],int.parse( dio.data['results'][0]['UID']), true);
-
     // print(myEnteredRoom);
+
 
     return dio.data['code'];
   } catch (e) {

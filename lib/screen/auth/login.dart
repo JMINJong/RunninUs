@@ -6,7 +6,6 @@ import 'package:runnin_us/provider/enter_check.dart';
 import 'package:runnin_us/screen/main/home_screen.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 
-import '../../api/get_user_info.dart';
 import '../../socket/socket_io.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -39,23 +38,22 @@ class LoginScreen extends StatelessWidget {
                 iconSize: 500,
                 onPressed: () async {
                   connectAndListen();
-                  await getUserInfoApi(myPageList[0]['uid']);
                   int? code = await CheckUserInWaitingRoomApi();
                   if (code == 200) {
                     isEntered = true;
                     print(myEnteredRoom['host']);
                     print(myPageList[0]['uid']);
 
-                    if (myEnteredRoom['host'].toString() == myPageList[0]['name'].toString()) {
+                    if (myEnteredRoom['host'].toString() == myPageList[0]['uid'].toString()) {
                       isHost = true;
                     }
                   }
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                         builder: (_) => ChangeNotifierProvider(
-                              create: (_) => EnterCheck(),
-                              child: HomeScreen(),
-                            )),
+                          create: (_) => EnterCheck(),
+                          child: HomeScreen(),
+                        )),
                   );
                 },
               ),
@@ -66,10 +64,14 @@ class LoginScreen extends StatelessWidget {
                   icon: Image.asset('asset/img/kakao_login.png'),
                   iconSize: 400,
                   onPressed: () async {
+                    const APP_REDIRECT_URI = "com.example.runnin_us";
+
+                    // 백엔드에서 미리 작성된 API 호출
+                    final url = Uri.parse('http://runninus-api.befined.com:8000/v1/login/kakao?redirect-uri=$APP_REDIRECT_URI');
+
+                    // 백엔드가 제공한 로그인 페이지에서 로그인 후 callback 데이터 반환
                     final result = await FlutterWebAuth.authenticate(
-                        url:
-                            'http://runninus-api.befined.com:8000/v1/login/kakao',
-                        callbackUrlScheme: "효재햄 여기서 뭐가 드가야하나용가리");
+                        url: url.toString(), callbackUrlScheme: APP_REDIRECT_URI);
                     print("콜백 결과 확인해보기 : {$result}");
                     //쿼리 리턴값에서 uid만 추출해보기
                     final uid = Uri.parse(result).queryParameters['uid'];
