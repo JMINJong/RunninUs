@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:runnin_us/api/check_user_in_waiting_room.dart';
+import 'package:runnin_us/api/get_user_info.dart';
 import 'package:runnin_us/const/dummy.dart';
 import 'package:runnin_us/provider/enter_check.dart';
+import 'package:runnin_us/screen/main/get_user_info.dart';
 import 'package:runnin_us/screen/main/home_screen.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 
@@ -38,6 +40,7 @@ class LoginScreen extends StatelessWidget {
                 iconSize: 500,
                 onPressed: () async {
                   connectAndListen();
+                  await getUserInfoApi(myPageList[0]['uid']);
                   int? code = await CheckUserInWaitingRoomApi();
                   if (code == 200) {
                     isEntered = true;
