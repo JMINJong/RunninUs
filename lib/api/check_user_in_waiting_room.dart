@@ -28,9 +28,9 @@ Future<int?> CheckUserInWaitingRoomApi() async {
           dio.data['results'][0]['EX_END_TIME'].split('.')[0].split('T')[1];
       myEnteredRoom['level'] = dio.data['results'][0]['LEVEL'].toString();
       myEnteredRoom['maxMember'] = dio.data['results'][0]['MAX_NUM'].toString();
-      // dio.data['results'][0]['member'].map((e){
-      //
-      // });
+      dio.data['results'][0]['NOW_USER_INFO'].map((e){
+        myEnteredRoom['member'].add(e['NICK']);
+      }).toList();
       socketRoomEnter(
           myPageList[0]['uid'], int.parse(dio.data['results'][0]['UID']), true);
     }
