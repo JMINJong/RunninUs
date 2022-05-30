@@ -306,6 +306,7 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 4,
                   child: GoogleMap(
+                    myLocationButtonEnabled: false,
                     onTap: (value) {
                       showModalBottomSheet(
                           context: context,

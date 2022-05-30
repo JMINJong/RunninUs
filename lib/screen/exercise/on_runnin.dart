@@ -212,6 +212,7 @@ class _OnRunningScreenState extends State<OnRunningScreen> {
                                 children: [
                                   Expanded(
                                     child: GoogleMap(
+                                      myLocationButtonEnabled: false,
                                       initialCameraPosition: CameraPosition(
                                           target: laln, zoom: 17),
                                       markers: {

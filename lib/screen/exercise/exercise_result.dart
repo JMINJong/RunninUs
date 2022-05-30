@@ -66,6 +66,7 @@ class _ExerciseResultState extends State<ExerciseResult> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height / 4,
                   child: GoogleMap(
+                    myLocationButtonEnabled: false,
                     initialCameraPosition:
                         CameraPosition(target: laln, zoom: 15),
                     polylines: polyline,

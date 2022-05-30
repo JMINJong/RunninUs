@@ -292,6 +292,7 @@ class _CreateWaitingRoomState extends State<CreateWaitingRoom> {
                             initialPosition =
                                 CameraPosition(target: defaultLatLng, zoom: 15);
                             return GoogleMap(
+                              myLocationButtonEnabled: false,
                               onMapCreated: (controller) {
                                 selectedLatLng = defaultLatLng;
                                 setState(() {

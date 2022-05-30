@@ -184,6 +184,7 @@ class _ExerciseAuthenticationState
                           children: [
                             Expanded(
                               child: GoogleMap(
+                                myLocationButtonEnabled: false,
                                 initialCameraPosition:
                                     CameraPosition(target: laln, zoom: 17),
                                 markers: {
