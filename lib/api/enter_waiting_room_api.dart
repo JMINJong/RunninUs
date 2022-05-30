@@ -26,10 +26,15 @@ Future<bool?> EnterWaitingRoomApi(int roomId) async {
     myEnteredRoom['startTime'] =
         '${(int.parse(dio.data['results'][0]['EX_START_TIME'].split('.')[0].split('T')[1].split(':')[0]) + 9) % 24}:${dio.data['results'][0]['EX_START_TIME'].split('.')[0].split('T')[1].split(':')[1]}';
     myEnteredRoom['endTime'] =
-    '${(int.parse(dio.data['results'][0]['EX_END_TIME'].split('.')[0].split('T')[1].split(':')[0]) + 9) % 24}:${dio.data['results'][0]['EX_END_TIME'].split('.')[0].split('T')[1].split(':')[1]}';
+        '${(int.parse(dio.data['results'][0]['EX_END_TIME'].split('.')[0].split('T')[1].split(':')[0]) + 9) % 24}:${dio.data['results'][0]['EX_END_TIME'].split('.')[0].split('T')[1].split(':')[1]}';
     myEnteredRoom['level'] = dio.data['results'][0]['LEVEL'].toString();
     myEnteredRoom['maxMember'] = dio.data['results'][0]['MAX_NUM'].toString();
     print(myEnteredRoom);
+    print(dio.data['results'][0]['NOW_USER_INFO']);
+    dio.data['results'][0]['NOW_USER_INFO'].map((e){
+      myEnteredRoom['member'].add(e['NICK']);
+    }).toList();
+
 
     socketRoomEnter(myPageList[0]['uid'], roomId, false);
     isHost = false;
