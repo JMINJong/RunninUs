@@ -1,12 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:runnin_us/api/get_user_nick.dart';
+import 'api_generator.dart';
 import '../const/dummy.dart';
 import '../socket/socket_io.dart';
 
 Future<int?> CheckUserInWaitingRoomApi() async {
   try {
     var dio = await Dio().request(
-      "http://runninus-api.befined.com:8000/v1/user/check",
+      getApi(API.CHECK_USER),
       data: {"user_id": myPageList[0]['uid']},
       options: Options(method: 'POST'),
     );

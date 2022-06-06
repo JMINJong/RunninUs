@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
+import 'api_generator.dart';
 
 Future<String?> GetUserNick(int uid) async {
   try {
     var dio = await Dio().request(
-      "http://runninus-api.befined.com:8000/v1/user/nick",
+      getApi(API.GET_USER_NICK),
       data: {"user_id": uid},
       options: Options(method: 'POST'),
     );

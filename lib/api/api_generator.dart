@@ -14,6 +14,10 @@ enum API {
   LOGIN,
   LOGOUT,
 
+  GET_MEMBERS_MEETING,
+
+  CHECK_USER,
+  GET_USER_NICK,
   GET_USER_INFO,
   UPDATE_USER_INFO
 }
@@ -31,6 +35,10 @@ Map<API, String> apiMap = {
   API.LOGIN: '/login/kakao',
   API.LOGOUT: '/logout',
 
+  API.GET_MEMBERS_MEETING: '/v1/meet/user',
+
+  API.CHECK_USER: '/v1/user/check',
+  API.GET_USER_NICK: '/v1/user/nick',
   API.GET_USER_INFO: '/v1/user/inquire',
   API.UPDATE_USER_INFO: '/v1/user/update'
 };
