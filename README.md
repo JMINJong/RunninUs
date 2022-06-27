@@ -3,7 +3,7 @@
 </p>
 
 <div align="center">
-  🏃‍♀️ GPS 기반 근거리 러닝 파트너 매칭 플랫폼, RunninUS <br>
+  🏃‍♀️ GPS 기반 근거리 러닝 파트너 매칭 플랫폼, RunninUs <br>
 <br>
   🎓 2022-1 가천대학교 컴퓨터공학과 졸업작품
 </div>
@@ -38,4 +38,4 @@
 |정민혁|김효재|이준희|전민종|
 |:-:|:-:|:--:|:-:|
 |<img src="https://avatars.githubusercontent.com/u/81516330?v=4" alt="bvnm0121" width="100" height="100">|<img src="https://avatars.githubusercontent.com/u/17705694?v=4" alt="hjhjdev" width="100" height="100">|<img src="https://avatars.githubusercontent.com/u/73161212?v=4" alt="iamjooon2" width="100" height="100">|<img src="https://avatars.githubusercontent.com/u/89850605?v=4" width="100" height="100">|<img src="https://avatars.githubusercontent.com/u/56240505?v=4" alt="kevin" width="100" height="100">|
-|[bvnm0121](https://github.com/bvnm0121)|[hjhjdev](https://github.com/hjhjdev)|[iamjooon2](https://github.com/bperhaps)|[JMINJong](https://github.com/jminjong)|
+|[bvnm0121](https://github.com/bvnm0121)|[hjhjdev](https://github.com/hjhjdev)|[iamjooon2](https://github.com/iamjooon2)|[JMINJong](https://github.com/jminjong)|
