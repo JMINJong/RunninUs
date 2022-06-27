@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="./RunninUs.png" alt="RunninUs-logo" width="340" height="340">
+    <img src="./release/RunninUs.png" alt="RunninUs-logo" width="340" height="340">
 </p>
 
 <div align="center">
