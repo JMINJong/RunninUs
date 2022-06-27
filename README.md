@@ -1,10 +1,9 @@
 <p align="center">
-    <img src="./client/release/RunninUs.png" alt="RunninUs-logo" width="340" height="340">
+    <img src="./RunninUs.png" alt="RunninUs-logo" width="340" height="340">
 </p>
 
 <div align="center">
   🏃‍♀️ GPS 기반 근거리 러닝 파트너 매칭 플랫폼, RunninUS <br>
-
 <br>
   🎓 2022-1 가천대학교 컴퓨터공학과 졸업작품
 </div>
