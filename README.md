@@ -25,7 +25,7 @@
 </p>
 <br/>
 
-## 🛠 Architecture
+## 🛠 Stacks
 
 <div align = center>
 <img src=./release/아키텍쳐.png width="500" height="500">
